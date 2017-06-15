@@ -32,6 +32,10 @@ object Dependencies {
   val postgresql     = "org.postgresql"      % 	"postgresql" 		   % "9.4-1201-jdbc41"
   val h2database     = "com.h2database"      %  "h2"                       % "1.4.187"          % "test"
   val scalatest      = "org.scalatest"       %% "scalatest"                % "2.2.4"            % "test"
+  val kafkaclients   = "org.apache.kafka"    %  "kafka-clients"            % "0.10.2.0"
+  val twitter4j      = "org.twitter4j"       % "twitter4j-stream"          % "4.0.6"
+  val kafkastreams   = "org.apache.kafka"    % "kafka-streams"             % "0.10.2.0"
+
 
   val playDependencies: Seq[ModuleID] = Seq(
     playframework.jdbc,
@@ -55,6 +59,12 @@ object Dependencies {
     postgresql,
     slick,
     h2database
+  )
+
+  val processingDependencies: Seq[ModuleID] = playDependencies ++ Seq(
+    kafkaclients,
+    twitter4j,
+    kafkastreams
   )
 
 }
