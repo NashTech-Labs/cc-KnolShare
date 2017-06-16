@@ -48,7 +48,7 @@ lazy val api = (
 
 lazy val processing = (
   PlayProject("processing")
-    settings(libraryDependencies ++= playDependencies)
+    settings(libraryDependencies ++= processingDependencies)
     settings(routesGenerator := InjectedRoutesGenerator)
     settings(scoverageSettings: _*)
 ) dependsOn(common)
