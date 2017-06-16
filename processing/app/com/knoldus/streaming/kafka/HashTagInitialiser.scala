@@ -1,15 +1,11 @@
 package com.knoldus.streaming.kafka
 
-import java.util
 import java.util.Properties
-import java.util.regex.Pattern
 
 import com.knoldus.utils.TwitterConfigReader
 import org.apache.kafka.common.serialization.Serdes
-import org.apache.kafka.streams.{KafkaStreams, StreamsConfig}
 import org.apache.kafka.streams.kstream.{KStream, KStreamBuilder}
-
-import scala.collection.JavaConverters._
+import org.apache.kafka.streams.{KafkaStreams, StreamsConfig}
 
 object HashTagInitialiser {
   private val configReader = new TwitterConfigReader
@@ -23,7 +19,6 @@ object HashTagInitialiser {
     val topic = configReader.getKStreamTopic
     val producerTopic = configReader.getKafkaTopic
     val stringSerde = Serdes.String
-//    val longSerde = Serdes.Long
     val builder = new KStreamBuilder
     val textLines: KStream[String, String] = builder.stream(stringSerde, stringSerde, producerTopic)
     println(">>>>>>>>>>>>>>>>>>>>>>>>>> " + textLines + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")

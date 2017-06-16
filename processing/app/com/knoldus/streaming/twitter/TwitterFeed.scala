@@ -29,21 +29,13 @@ class TwitterFeed {
         System.out.println("Sent: " + tweet)
       }
 
-      def onDeletionNotice(statusDeletionNotice: StatusDeletionNotice) {
-        //Do Nothing
-      }
+      def onDeletionNotice(statusDeletionNotice: StatusDeletionNotice) = ???
 
-      def onTrackLimitationNotice(numberOfLimitedStatuses: Int) {
-        //Do Nothing
-      }
+      def onTrackLimitationNotice(numberOfLimitedStatuses: Int) = ???
 
-      def onScrubGeo(l: Long, l1: Long) {
-        //Do Nothing
-      }
+      def onScrubGeo(l: Long, l1: Long) = ???
 
-      def onStallWarning(stallWarning: StallWarning) {
-        //Do Nothing
-      }
+      def onStallWarning(stallWarning: StallWarning) = ???
 
       def onException(ex: Exception) {
         ex.printStackTrace
