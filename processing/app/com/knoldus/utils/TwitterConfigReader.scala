@@ -6,18 +6,18 @@ class TwitterConfigReader {
 
   val conf = ConfigFactory.load()
 
-  def getTwitterConsumerKey() = conf.getString("twitter.consumerKey")
+  def getTwitterConsumerKey(): String = conf.getString("twitter.consumerKey")
 
-  def getTwitterConsumerSecretKey() = conf.getString("twitter.consumerSecret")
+  def getTwitterConsumerSecretKey(): String = conf.getString("twitter.consumerSecret")
 
-  def getTwitterAccessToken() = conf.getString("twitter.accessToken")
+  def getTwitterAccessToken(): String = conf.getString("twitter.accessToken")
 
-  def getTwitterAccessSecretToken() = conf.getString("twitter.accessTokenSecret")
+  def getTwitterAccessSecretToken(): String = conf.getString("twitter.accessTokenSecret")
 
-  def getKafkaServers() = conf.getString("kafka.servers")
+  def getKafkaServers(): String = conf.getString("kafka.servers")
 
-  def getKafkaTopic() = conf.getString("kafka.topic")
+  def getKafkaTopic(): String = conf.getString("kafka.topic")
 
-  def getKStreamTopic() = conf.getString("kstream.topic")
+  def getKStreamTopic(): String = conf.getString("kstream.topic")
 
 }

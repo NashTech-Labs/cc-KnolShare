@@ -3,11 +3,11 @@ package com.knoldus.streaming.twitter
 import java.io.IOException
 
 import com.knoldus.streaming.kafka.TweetProducer
-import com.knoldus.utils.TwitterConfigReader
+import com.knoldus.utils.{LoggerHelper, TwitterConfigReader}
 import twitter4j.conf.ConfigurationBuilder
 import twitter4j._
 
-class TwitterFeed {
+class TwitterFeed extends LoggerHelper {
   private val configReader = new TwitterConfigReader
 
   private def getTwitterConfig = {
@@ -21,23 +21,23 @@ class TwitterFeed {
 
   @throws[TwitterException]
   @throws[IOException]
-  def sendTweetsToKafka() {
+  def sendTweetsToKafka(): Unit = {
     val listener = new StatusListener() {
-      def onStatus(status: Status) {
+      def onStatus(status: Status): Unit = {
         val tweet = status.getText
         new TweetProducer().send(tweet)
-        System.out.println("Sent: " + tweet)
+        getLogger(this.getClass).info("Sent: " + tweet)
       }
 
-      def onDeletionNotice(statusDeletionNotice: StatusDeletionNotice) = ???
+      def onDeletionNotice(statusDeletionNotice: StatusDeletionNotice) = {}
 
-      def onTrackLimitationNotice(numberOfLimitedStatuses: Int) = ???
+      def onTrackLimitationNotice(numberOfLimitedStatuses: Int) = {}
 
-      def onScrubGeo(l: Long, l1: Long) = ???
+      def onScrubGeo(l: Long, l1: Long) = {}
 
-      def onStallWarning(stallWarning: StallWarning) = ???
+      def onStallWarning(stallWarning: StallWarning) = {}
 
-      def onException(ex: Exception) {
+      def onException(ex: Exception): Unit = {
         ex.printStackTrace
       }
     }
