@@ -30,7 +30,6 @@ object Dependencies {
   val logback        = "ch.qos.logback"      %  "logback-classic"          % "1.1.3"
   val slick          = "com.typesafe.slick"  %% "slick"                    % "3.1.1"
   val postgresql     = "org.postgresql"      % 	"postgresql" 		           % "9.4-1201-jdbc41"
-  val postgresql     = "org.postgresql"      % 	"postgresql" 		   % "9.4-1201-jdbc41"
   val h2database     = "com.h2database"      %  "h2"                       % "1.4.187"          % "test"
   val scalatest      = "org.scalatest"       %% "scalatest"                % "2.2.4"            % "test"
 

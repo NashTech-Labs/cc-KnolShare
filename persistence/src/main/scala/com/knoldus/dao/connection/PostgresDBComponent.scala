@@ -1,12 +1,13 @@
 package com.knoldus.dao.connection
 
-/**
- * Created by knoldus on 15/6/17.
- */
+import slick.driver.PostgresDriver
+
 trait PostgresDBComponent extends DBComponent {
 
   val driver = PostgresDriver
+
   import driver.api._
+
   val db = PostgresDB.connectionPool
 }
 
