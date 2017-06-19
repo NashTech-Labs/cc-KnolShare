@@ -2,13 +2,15 @@ package com.knoldus.streaming.kafka
 
 import java.util.{Collections, Properties}
 
-import com.knoldus.utils.TwitterConfigReader
+import com.knoldus.utils.{Constants, LoggerHelper, TwitterConfigReader}
 import org.apache.kafka.clients.consumer.KafkaConsumer
 
-class TweetConsumer {
+import scala.collection.JavaConversions._
+
+class TweetConsumer extends LoggerHelper {
   private val configReader = new TwitterConfigReader
 
-  def consumeTweets(groupId: String, kafkaTopic: String) {
+  def consumeTweets(groupId: String, kafkaTopic: String): Unit = {
     val kafkaServers = configReader.getKafkaServers
     val props = new Properties
     props.put("bootstrap.servers", kafkaServers)
@@ -22,12 +24,11 @@ class TweetConsumer {
     val kafkaConsumer = new KafkaConsumer(props)
     kafkaConsumer.subscribe(Collections.singletonList(kafkaTopic))
     while (true) {
-      val records = kafkaConsumer.poll(100)
-      import scala.collection.JavaConversions._
+      val records = kafkaConsumer.poll(Constants.HUNDRED)
       for (record <- records) {
-        System.out.println("Received: " + record.key + " ---> " + record.value)
+        getLogger(this.getClass).info("Received: " + record.key + " ---> " + record.value)
       }
-      System.out.println("\n\n=======================\n\n")
+      getLogger(this.getClass).info("\n\n=======================\n\n")
     }
   }
 

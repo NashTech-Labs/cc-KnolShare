@@ -2,15 +2,15 @@ package com.knoldus.streaming.kafka
 
 import java.util.Properties
 
-import com.knoldus.utils.TwitterConfigReader
+import com.knoldus.utils.{LoggerHelper, TwitterConfigReader}
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.kstream.{KStream, KStreamBuilder}
 import org.apache.kafka.streams.{KafkaStreams, StreamsConfig}
 
-object HashTagInitialiser {
+object HashTagInitialiser extends LoggerHelper {
   private val configReader = new TwitterConfigReader
 
-  def hashTagCounter() {
+  def hashTagCounter(): Unit = {
     val streamsConfiguration = new Properties
     streamsConfiguration.put(StreamsConfig.APPLICATION_ID_CONFIG, "find-top-hashtag")
     streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
@@ -21,7 +21,7 @@ object HashTagInitialiser {
     val stringSerde = Serdes.String
     val builder = new KStreamBuilder
     val textLines: KStream[String, String] = builder.stream(stringSerde, stringSerde, producerTopic)
-    println(">>>>>>>>>>>>>>>>>>>>>>>>>> " + textLines + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    getLogger(this.getClass).info(">>>>>>>>>>>>>>>>>>>>>>>>>> " + textLines + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
     textLines.to(stringSerde, stringSerde, topic)
     val streams = new KafkaStreams(builder, streamsConfiguration)
     streams.start

@@ -8,7 +8,7 @@ import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 class TweetProducer {
   private val configReader = new TwitterConfigReader
 
-  def send(tweet: String) {
+  def send(tweet: String): Unit = {
     val kafkaServers = configReader.getKafkaServers
     val kafkaTopic = configReader.getKafkaTopic
     val properties = new Properties()
