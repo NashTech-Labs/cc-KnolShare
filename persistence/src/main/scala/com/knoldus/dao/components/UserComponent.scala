@@ -16,8 +16,8 @@ trait UserComponent extends UserTable {
       .map(userId => user.copy(id = userId))
   }
 
-  def updateUser(user: User): Future[Int] = {
-    db.run(userTableQuery.filter(_.id === user.id).update(user))
+  def updateUserById(id: Int, user: User): Future[Int] = {
+    db.run{userTableQuery.filter(_.id === id).update(user)}
   }
 
   def getUserById(userId: Int): Future[Option[User]] = {

@@ -8,9 +8,9 @@ trait UserTable {
 
   import driver.api._
 
-  private[components] class UserTable(tag: Tag) extends Table[User](tag, "User") {
+  private[components] class UserTable(tag: Tag) extends Table[User](tag, "users") {
     val id = column[Int]("id", O.PrimaryKey, O.AutoInc)
-    val userName = column[String]("userName")
+    val userName = column[String]("username")
     val email = column[String]("email")
     val password = column[String]("password")
 
