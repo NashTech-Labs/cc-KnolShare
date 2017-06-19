@@ -1,26 +1,26 @@
-package controllers
+package services
 
-import play.api.data._
 import play.api.data.Forms._
-import java.util.regex.{Matcher, Pattern}
+import play.api.data._
+import util.RegexMatcher
 
-case class UserFormData(
+case class RegistrationFormData(
                          firstName: String,
-                         middleName: Option[String], //Optional field
+                         middleName: Option[String],//Optional field
                          lastName: String,
                          userName: String,
                          password: String,
                          confirmPassword: String,
                          email: String,
                          slackId: Option[String],   //Optional field (for notification)
-                         phone: Option[String]     //Optional field (for notification)
+                         phone: Option[String]      //Optional field (for notification)
                        )
 
-private[controllers] trait FormDataCreator extends {
+trait RegistrationFormValidator extends RegexMatcher{
 
   val userFormWithConstraints = Form(
     mapping(
-      "first-name" -> nonEmptyText,
+      "firstName" -> nonEmptyText,
       "middleName" -> optional(nonEmptyText),
       "lastName" -> nonEmptyText,
       "userName" -> nonEmptyText,
@@ -29,7 +29,7 @@ private[controllers] trait FormDataCreator extends {
       "email" -> nonEmptyText,
       "slackId" -> optional(nonEmptyText),
       "phone" -> optional(nonEmptyText)
-    )(UserFormData.apply)(UserFormData.unapply)
+    )(RegistrationFormData.apply)(RegistrationFormData.unapply)
         .verifying("Incorrect form fields!!", { userData =>
           validateFormFields(userData.firstName, userData.middleName, userData.lastName, userData.userName,
             userData.password, userData.confirmPassword, userData.email, userData.slackId, userData.phone).isDefined
@@ -44,7 +44,7 @@ private[controllers] trait FormDataCreator extends {
                          confirmPassword: String,
                          email: String,
                          slackId: Option[String],
-                         phone: Option[String]): Option[UserFormData] = {
+                         phone: Option[String]): Option[RegistrationFormData] = {
 
     isAlphabeticWithNoSpaces(firstName) &
     isAlphabeticWithNoSpaces(middleName.getOrElse("")) &
@@ -54,45 +54,10 @@ private[controllers] trait FormDataCreator extends {
     isEmail(email) &
     isAlphaNumericWithNoSpaces(slackId.getOrElse("")) &
     isPhoneNumber(phone.getOrElse("")) match {
-      case true => Some(UserFormData(firstName, middleName, lastName, userName, password, confirmPassword, email, slackId, phone))
+      case true => Some(RegistrationFormData(firstName, middleName, lastName, userName, password, confirmPassword, email, slackId, phone))
       case false => None
     }
-
   }
-
-  def isUserName(string: String): Boolean = {
-    val pattern : String = "([a-zA-Z0-9_\\-\\.@#\\$]+)"
-    verifyRegex(pattern, string)
-  }
-
-  def passwordsMatch(pass1: String, pass2: String): Boolean = {
-    pass1 == pass2
-  }
-
-  def isAlphaNumericWithNoSpaces(string: String): Boolean = {
-    val pattern : String = "([a-zA-Z0-9]{10})"
-    verifyRegex(pattern, string)
-  }
-
-  def isPhoneNumber(string: String): Boolean = {
-    val pattern : String = "([0-9]{10})"
-    verifyRegex(pattern, string)
-  }
-
-  def isAlphabeticWithNoSpaces(string: String): Boolean = {
-    val pattern: String = "([a-zA-Z]+)"
-    verifyRegex(pattern, string)
-  }
-
-  def isEmail(string: String): Boolean = {
-    val emailPattern: String = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
-    verifyRegex(emailPattern, string)
-  }
-
-  def verifyRegex(regexPattern: String, stringToMatch: String): Boolean = {
-    val pattern: Pattern = Pattern.compile(regexPattern)
-    val matcher: Matcher = pattern.matcher(stringToMatch)
-    matcher.matches()
-  }
-
 }
+
+object RegistrationFormValidatorImpl extends RegistrationFormValidator

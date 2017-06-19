@@ -25,6 +25,7 @@ object Dependencies {
     val requirejs    = "org.webjars"         %  "requirejs"                % "2.1.18"
     val jquery       = "org.webjars"         %  "jquery"                   % "2.1.4"
     val fontawesome  = "org.webjars"         %  "font-awesome"             % "4.3.0-2"
+    val scalaBcrypt  = "com.github.t3hnar"   %% "scala-bcrypt"             % "3.0"
   }
 
   val logback        = "ch.qos.logback"      %  "logback-classic"          % "1.1.3"
@@ -50,7 +51,8 @@ object Dependencies {
     webjars.bootstrap,
     webjars.requirejs,
     webjars.jquery,
-    webjars.fontawesome
+    webjars.fontawesome,
+    webjars.scalaBcrypt
   )
 
   val webDependencies: Seq[ModuleID] = playDependencies ++ webjarsDependencies
