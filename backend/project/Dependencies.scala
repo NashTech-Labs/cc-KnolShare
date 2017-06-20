@@ -2,7 +2,7 @@ import sbt._
 
 object Dependencies {
 
-  val scala = "2.11.6"
+  val scala = "2.11.7"
 
   val resolvers = DefaultOptions.resolvers(snapshot = true) ++ Seq(
     "scalaz-releases" at "http://dl.bintray.com/scalaz/releases"

@@ -2,7 +2,7 @@ import CommonSettings._
 import Dependencies._
 import ScoverageSbtPlugin.ScoverageKeys._
 
-name := """playing-microservices"""
+name := """cc-Knolshare"""
 
 version := "1.0"
 
@@ -21,40 +21,40 @@ lazy val root = (
 )
 
 lazy val common = (
-  BaseProject("common")
+  baseProject("common")
   settings(libraryDependencies ++= playDependencies)
   settings(scoverageSettings: _*)
 )
 
 lazy val persistence = (
-  BaseProject("persistence")
+  baseProject("persistence")
     settings(libraryDependencies ++= playDependencies)
     settings(scoverageSettings: _*)
 ) dependsOn common
 
 lazy val web = (
-  PlayProject("web")
+  playProject("web")
     settings(libraryDependencies ++= webDependencies)
     settings(routesGenerator := InjectedRoutesGenerator)
     settings(scoverageSettings: _*)
 ) dependsOn (common,notification)
 
 lazy val api = (
-  PlayProject("api")
+  playProject("api")
     settings(libraryDependencies ++= playDependencies)
     settings(routesGenerator := InjectedRoutesGenerator)
     settings(scoverageSettings: _*)
 ) dependsOn common
 
 lazy val processing = (
-  PlayProject("processing")
+  playProject("processing")
     settings(libraryDependencies ++= processingDependencies)
     settings(routesGenerator := InjectedRoutesGenerator)
     settings(scoverageSettings: _*)
 ) dependsOn common
 
 lazy val notification = (
-  PlayProject("notification")
+  playProject("notification")
     settings(libraryDependencies ++= notificationDependencies)
     settings(routesGenerator := InjectedRoutesGenerator)
     settings(scoverageSettings: _*)
