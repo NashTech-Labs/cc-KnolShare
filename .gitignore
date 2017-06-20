@@ -88,3 +88,13 @@ processing/bin/
 processing/.cache-main
 processing/.cache-tests
 processing/application-log-*.gz
+
+# notification related ignores #
+notification/.classpath
+notification/.project
+notification/.settings/
+notification/.cache
+notification/bin/
+notification/.cache-main
+notification/.cache-tests
+notification/application-log-*.gz
