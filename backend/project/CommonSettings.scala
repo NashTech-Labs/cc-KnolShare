@@ -1,6 +1,6 @@
 import sbt._
 import Keys._
-import play.PlayScala
+import play.sbt.PlayScala
 
 object CommonSettings {
 
@@ -12,14 +12,14 @@ object CommonSettings {
     parallelExecution in Test := true
   )
 
-  def BaseProject(name: String): Project = (
+  def baseProject(name: String): Project = (
     Project(name, file(name))
-    settings(projectSettings:_*)
+    settings(projectSettings: _*)
   )
 
-  def PlayProject(name: String): Project = (
-    BaseProject(name)
-    enablePlugins(PlayScala)
+  def playProject(name: String): Project = (
+    baseProject(name)
+    enablePlugins PlayScala
   )
   
 }

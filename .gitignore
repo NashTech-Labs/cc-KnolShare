@@ -98,3 +98,6 @@ notification/bin/
 notification/.cache-main
 notification/.cache-tests
 notification/application-log-*.gz
+
+
+backend/.idea

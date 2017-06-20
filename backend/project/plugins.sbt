@@ -1,7 +1,7 @@
 resolvers ++= DefaultOptions.resolvers(snapshot = true)
 
 // The Play plugin
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.4.0")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.5.0")
 
 //Idea plugin
 addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.5.2")
