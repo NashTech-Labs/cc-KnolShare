@@ -28,7 +28,7 @@ lazy val common = (
 
 lazy val persistence = (
   BaseProject("persistence")
-    settings(libraryDependencies ++= playDependencies)
+    settings(libraryDependencies ++= persistenceDependencies)
     settings(scoverageSettings: _*)
 ) dependsOn common
 
