@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <h3>Home Page</h3>
+
+  <button ion-button round (click)="goToPage('Login')">Login</button>
+  <button ion-button round (click)="goToPage('Signup')">Signup</button>
+
+  <!--<button ion-button secondary menuToggle>Toggle Menu</button>-->
+</ion-content>

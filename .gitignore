@@ -101,3 +101,7 @@ notification/application-log-*.gz
 
 
 backend/.idea
+frontend/.idea
+frontend/hooks
+frontend/node_modules
+frontend/www
