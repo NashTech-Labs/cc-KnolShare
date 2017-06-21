@@ -6,24 +6,24 @@ import javax.mail.internet._
 
 import scala.util.{Failure, Success, Try}
 
-import org.slf4j.LoggerFactory
+import com.knoldus.utils.LoggerHelper
 import utils.NotificationConfigReader
 
-class MailApi {
+trait MailApi extends LoggerHelper {
 
-  val logger = LoggerFactory.getLogger(this.getClass)
-  val userEmail = NotificationConfigReader.email
-  val passWord = NotificationConfigReader.password
-  val port = "587"
-  val hostName = "smtp.gmail.com"
+  private val logger = getLogger(this.getClass)
+  private val userEmail = NotificationConfigReader.email
+  private val passWord = NotificationConfigReader.password
+  private val port = "587"
+  private val hostName = "smtp.gmail.com"
 
-  val properties = new Properties
+  private val properties = new Properties
   properties.put("mail.smtp.host", hostName)
   properties.put("mail.smtp.port", port)
   properties.put("mail.smtp.auth", "true")
   properties.put("mail.smtp.starttls.enable", "true")
 
-  val session = Session.getDefaultInstance(properties)
+  private val session = Session.getDefaultInstance(properties)
 
 
   def sendMail(recipients: List[String], subject: String, content: String): Boolean = {
@@ -54,3 +54,5 @@ class MailApi {
   }
 
 }
+
+object MailApiImpl extends MailApi
