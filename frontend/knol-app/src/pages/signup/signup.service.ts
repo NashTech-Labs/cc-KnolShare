@@ -11,14 +11,15 @@ import {SignupForm} from "../../models/signup-form";
 export class SignupService {
   constructor(private http: Http) {}
 
-  login(loginData: SignupForm) {
-    let headers = new Headers({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.post('', loginData, {headers: headers})
-      .map(res => this.extractData(res))
-      .catch(this.handleError);
+  signup(signupData: SignupForm) {
+    //let headers = new Headers({
+    //  'Content-Type': 'application/json'
+    //});
+    //
+    //return this.http.post('', signupData, {headers: headers})
+    //  .map(res => this.extractData(res))
+    //  .catch(this.handleError);
+    return Observable.of('')
   }
 
   private extractData(res: any) {

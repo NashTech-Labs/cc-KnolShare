@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { LoginForm } from '../../models/login-form';
 import {LoginService} from "./login.service";
+import { AlertController } from 'ionic-angular';
 
 @Component({
   selector: 'page-login',
@@ -11,13 +12,15 @@ import {LoginService} from "./login.service";
 export class LoginPage {
   loginFormObj: LoginForm = new LoginForm();
 
-  constructor(public navCtrl: NavController, private loginService: LoginService) {}
+  constructor(public navCtrl: NavController,
+              private loginService: LoginService,
+              private alertController: AlertController) {}
 
   submit() {
     this.loginService.login(this.loginFormObj).subscribe( (data: any) => {
-
+      this.alertController.create({title : 'Successfully Logged in', message: 'login hogya'})
     }, (err: any) => {
-
+      this.alertController.create({title : 'Invalid credentials', message: 'login nahi hua'})
     })
   }
 

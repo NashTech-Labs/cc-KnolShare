@@ -12,13 +12,14 @@ export class LoginService {
   constructor(private http: Http) {}
 
   login(loginData: LoginForm) {
-    let headers = new Headers({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.post('', loginData, {headers: headers})
-      .map(res => this.extractData(res))
-      .catch(this.handleError);
+    //let headers = new Headers({
+    //  'Content-Type': 'application/json'
+    //});
+    //
+    //return this.http.post('', loginData, {headers: headers})
+    //  .map(res => this.extractData(res))
+    //  .catch(this.handleError);
+    return Observable.of('')
   }
 
   private extractData(res: any) {
