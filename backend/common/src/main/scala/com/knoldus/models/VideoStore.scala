@@ -1,8 +1,8 @@
 package com.knoldus.models
 
-class VideoStore(
+case class VideoStore(
                   id: Int,
-                  presenter: String,
+                  presentor: String,
                   topic: String,
                   videoUrl: String,
                   rating: Int
