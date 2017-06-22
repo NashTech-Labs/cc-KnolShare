@@ -27,4 +27,14 @@ CREATE TABLE knolxSession(
 
 INSERT INTO knolxSession values(1,'Geetika','xyz',1,4,'2017-12-21');
 
+CREATE TABLE video_store(
+    id BIGSERIAL PRIMARY KEY,
+    presentor varchar(20) NOT NULL,
+    topic varchar(50) NOT NULL,
+    video_url varchar(50) NOT NULL,
+    rating INT NOT NULL
+    );
+
+INSERT INTO video_store values(1,'Sangeeta','xyz','Some_url',5);
+
 
