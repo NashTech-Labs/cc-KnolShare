@@ -5,9 +5,7 @@ import com.knoldus.dao.components.UserComponent
 
 @ImplementedBy(classOf[UserServiceImpl])
 trait UserService {
-
   val userComponent: UserComponent
-
 }
 
 class UserServiceImpl extends UserService {

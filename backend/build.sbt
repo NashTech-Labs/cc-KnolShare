@@ -9,7 +9,10 @@ version := "1.0"
 scalaVersion := scala
 
 val scoverageSettings = Seq(
-  coverageExcludedPackages := "<empty>;controllers.javascript;views.*;router",
+  coverageExcludedPackages := "<empty>;controllers.javascript;views.*;router;" +
+  "com\\.knoldus\\.models\\..*;" +
+  "com\\.knoldus\\.dao\\.connection\\..*;" +
+  "com\\.knoldus\\.utils\\..*;",
   coverageExcludedFiles := "",
   coverageMinimum := 80,
   coverageFailOnMinimum := true
