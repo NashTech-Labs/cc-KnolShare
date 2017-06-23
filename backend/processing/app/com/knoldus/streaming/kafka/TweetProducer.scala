@@ -1,7 +1,6 @@
 package com.knoldus.streaming.kafka
 
 import java.util.Properties
-
 import com.knoldus.utils.TwitterConfigReader
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 

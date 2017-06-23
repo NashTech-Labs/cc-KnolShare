@@ -13,7 +13,7 @@ trait VideoStoreComponent extends VideoTable {
 
   import driver.api._
 
-  def addVideo(vidgit statuseo: VideoStore): Future[VideoStore] = {
+  def addVideo(video: VideoStore): Future[VideoStore] = {
     db.run {
       videoTableQuery returning videoTableQuery.map(_.id) += video
     }.map(videoId => video.copy(id = videoId))
