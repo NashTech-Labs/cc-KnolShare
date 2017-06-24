@@ -2,6 +2,7 @@ package com.knoldus.dao.components
 
 import com.knoldus.dao.connection.TestDBHelper
 import com.knoldus.models.KnolxSession
+import com.knoldus.utils.Constants._
 import play.api.test.PlaySpecification
 
 
@@ -12,12 +13,11 @@ class KnolxSessionComponentSpec extends PlaySpecification with KnolxSessionCompo
 
     "be able to create new knolx session" in {
       val knolx: KnolxSession = await(createKnolxSession(KnolxSession(2, "shivangi", Some("xyz"), Some(2), None, java.sql.Date.valueOf("2017-09-12"))))
-      println(knolx)
       knolx.id must be equalTo 2
     }
 
     "be able to update knolx" in {
-      val updateCount = await(updateKnolxById(1, KnolxSession(2, "shivangi", Some("xyz"), Some(2), Some(4), java.sql.Date.valueOf("2017-09-12"))))
+      val updateCount = await(updateKnolxById(1, KnolxSession(TWO, "shivangi", Some("xyz"), Some(TWO), Some(FOUR), java.sql.Date.valueOf("2017-09-12"))))
       updateCount must beEqualTo(1)
     }
 

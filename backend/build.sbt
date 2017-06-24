@@ -8,6 +8,8 @@ version := "1.0"
 
 scalaVersion := scala
 
+offline := true
+
 val scoverageSettings = Seq(
   coverageExcludedPackages := "router;" +
   "com\\.knoldus\\.views.*;" +
