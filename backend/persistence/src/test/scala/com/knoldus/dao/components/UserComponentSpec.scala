@@ -29,6 +29,18 @@ class UserComponentSpec extends PlaySpecification with UserComponent with TestDB
       user.get.id must beEqualTo(1)
       user.get.userName must beEqualTo("sangeeta")
     }
+
+    "be able to get user by email" in {
+      val user: Option[User] = await(getUserByEmail("sang@gmail.com"))
+      user.get.id must beEqualTo(1)
+      user.get.userName must beEqualTo("sangeeta")
+    }
+
+    "be able to get user by email and password" in {
+      val user: Option[User] = await(getUserByEmailAndPassword("sang@gmail.com", "1234"))
+      user.get.id must beEqualTo(1)
+      user.get.userName must beEqualTo("sangeeta")
+    }
   }
 
 }

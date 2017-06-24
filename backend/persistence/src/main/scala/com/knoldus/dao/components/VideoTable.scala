@@ -16,7 +16,7 @@ trait VideoTable {
     val videoUrl = column[String]("video_url")
     val rating = column[Int]("rating")
 
-    def * : ProvenShape[VideoStore] = (id, presentor, topic, videoUrl, rating) <> (VideoStore.tupled, VideoStore.unapply)
+    def * : ProvenShape[VideoStore] = (id, presentor, topic, videoUrl, rating) <> ((VideoStore.apply _).tupled, VideoStore.unapply)
   }
 
   val videoTableQuery = TableQuery[VideoTable]

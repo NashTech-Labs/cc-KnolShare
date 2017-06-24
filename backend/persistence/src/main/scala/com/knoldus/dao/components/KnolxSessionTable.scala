@@ -21,8 +21,8 @@ trait KnolxSessionTable {
     val rating = column[Option[Int]]("rating")
     val date = column[Date]("scheduledDate")
 
-    def * : ProvenShape[KnolxSession] = (id, presentor, topic, sessionId, rating, date) <> (KnolxSession.tupled, KnolxSession.unapply)
+    def * : ProvenShape[KnolxSession] = (id, presentor, topic, sessionId, rating, date) <> ((KnolxSession.apply _).tupled, KnolxSession.unapply)
   }
 
-  val knolxSessionTableQuery = TableQuery[KnolxSessionTable]
+  lazy val knolxSessionTableQuery = TableQuery[KnolxSessionTable]
 }

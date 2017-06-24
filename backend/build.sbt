@@ -21,7 +21,7 @@ val scoverageSettings = Seq(
 
 lazy val root = (
   project.in(file("."))
-  aggregate(common, persistence, api, web, processing)
+  aggregate(common, persistence, web, processing)
 )
 
 lazy val common = (
@@ -32,7 +32,7 @@ lazy val common = (
 
 lazy val persistence = (
   baseProject("persistence")
-    settings(libraryDependencies ++=persistenceDependencies)
+    settings(libraryDependencies ++= persistenceDependencies)
     settings(scoverageSettings: _*)
 ) dependsOn common
 
@@ -42,13 +42,6 @@ lazy val web = (
     settings(routesGenerator := InjectedRoutesGenerator)
     settings(scoverageSettings: _*)
 ) dependsOn (common,notification)
-
-lazy val api = (
-  playProject("api")
-    settings(libraryDependencies ++= playDependencies)
-    settings(routesGenerator := InjectedRoutesGenerator)
-    settings(scoverageSettings: _*)
-) dependsOn common
 
 lazy val processing = (
   playProject("processing")
