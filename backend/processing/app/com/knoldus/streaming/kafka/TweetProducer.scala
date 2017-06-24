@@ -1,30 +1,38 @@
 package com.knoldus.streaming.kafka
 
 import java.util.Properties
-import com.knoldus.utils.TwitterConfigReader
+
+import com.google.inject.Inject
+import com.knoldus.utils.{LoggerHelper, TwitterConfigReader}
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 
-class TweetProducer {
-  private val configReader = new TwitterConfigReader
+import scala.util.{Failure, Success, Try}
 
-  def send(tweet: String): Unit = {
-    val kafkaServers = configReader.getKafkaServers
-    val kafkaTopic = configReader.getKafkaTopic
-    val properties = new Properties()
-    properties.put("bootstrap.servers", kafkaServers)
-    properties.put("acks", "all")
-    properties.put("retries", "0")
-    properties.put("batch.size", "16384")
-    properties.put("linger.ms", "1")
-    properties.put("buffer.memory", "33554432")
-    properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
-    properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
-    try {
-      val producer = new KafkaProducer[String, String](properties)
-      producer.send(new ProducerRecord[String, String](kafkaTopic, tweet.toString))
-    } catch {
-      case ex: Exception => {
-        ex.printStackTrace()
+class TweetProducer @Inject()(configReader: TwitterConfigReader) extends LoggerHelper{
+
+  def send(tweet: String): Boolean = {
+    Try {
+      val kafkaServers = configReader.getKafkaServers
+      val kafkaTopic = configReader.getKafkaTopic
+      val properties = new Properties()
+      properties.put("bootstrap.servers", kafkaServers)
+      properties.put("acks", "all")
+      properties.put("retries", "0")
+      properties.put("batch.size", "16384")
+      properties.put("linger.ms", "1")
+      properties.put("buffer.memory", "33554432")
+      properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+      properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+      val kafkaProducer = new KafkaProducer[String, String](properties)
+      (kafkaTopic, kafkaProducer)
+    } match {
+      case Success(data) =>
+        val (kafkaTopic, producer) = data
+        producer.send(new ProducerRecord[String, String](kafkaTopic, tweet.toString))
+        true
+      case Failure(exception) => {
+        getLogger(this.getClass).debug(exception.getMessage)
+        false
       }
     }
   }
