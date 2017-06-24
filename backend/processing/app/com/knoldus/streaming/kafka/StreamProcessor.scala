@@ -13,9 +13,7 @@ import org.apache.kafka.streams.{KafkaStreams, StreamsConfig}
 
 import scala.util.{Failure, Success, Try}
 
-@ImplementedBy(classOf[StreamProcessorImpl])
-trait StreamProcessor extends Actor with LoggerHelper {
-  val configReader: TwitterConfigReader
+class StreamProcessor @Inject()(configReader: TwitterConfigReader) extends Actor with LoggerHelper {
 
   override def receive: Receive = {
     case Message(PROCESS_DATA) => hashTagCounter()
@@ -48,9 +46,6 @@ trait StreamProcessor extends Actor with LoggerHelper {
   }
 }
 
-class StreamProcessorImpl @Inject()(twitterConfigReader: TwitterConfigReader) extends StreamProcessor {
-  val configReader = twitterConfigReader
-}
 
 
 

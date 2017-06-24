@@ -11,10 +11,7 @@ import com.knoldus.utils.Constants._
 
 import scala.collection.JavaConversions._
 
-@ImplementedBy(classOf[TweetConsumerActorImpl])
-trait TweetConsumerActor extends Actor with LoggerHelper {
-
-  val configReader: TwitterConfigReader
+class TweetConsumerActor @Inject()(configReader: TwitterConfigReader) extends Actor with LoggerHelper {
 
   override def receive: Receive = {
     case ConsumeTweetMessage(CONSUME_DATA, groupId: String, kafkaTopic: String) => consumeTweets(groupId, kafkaTopic)
@@ -41,9 +38,4 @@ trait TweetConsumerActor extends Actor with LoggerHelper {
       getLogger(this.getClass).info("\n\n===========Consuming Tweets============\n\n")
     }
   }
-}
-
-class TweetConsumerActorImpl @Inject()(twitterConfigReader: TwitterConfigReader) extends
-  TweetConsumerActor {
-  val configReader = twitterConfigReader
 }
