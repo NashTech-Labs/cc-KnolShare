@@ -3,7 +3,7 @@ package com.knoldus.dao.services
 import scala.concurrent.Future
 
 import com.knoldus.dao.components.AdminComponent
-import com.knoldus.dao.services.user.AdminService
+import com.knoldus.dao.services.user.AdminDBService
 import com.knoldus.models.Admin
 import org.specs2.mock.Mockito
 import play.api.test.PlaySpecification
@@ -11,11 +11,11 @@ import play.api.test.PlaySpecification
 /**
  * Created by knoldus on 23/6/17.
  */
-class AdminServiceSpec extends PlaySpecification with Mockito {
+class AdminDBServiceSpec extends PlaySpecification with Mockito {
 
   val mockedAdminComponent = mock[AdminComponent]
 
-  object TestService extends AdminService {
+  object TestService extends AdminDBService {
     val adminComponent = mockedAdminComponent
   }
 

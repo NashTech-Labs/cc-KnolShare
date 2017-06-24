@@ -1,9 +1,7 @@
 package com.knoldus.dao.components
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
-import scala.util.Try
+import scala.concurrent.Future
 
 import com.knoldus.dao.connection.{DBComponent, PostgresDBComponent}
 import com.knoldus.models.User
