@@ -5,7 +5,7 @@ import scala.concurrent.Future
 import com.knoldus.dao.components.AdminComponent
 import com.knoldus.models.Admin
 
-trait AdminService {
+trait AdminDBService {
 
   val adminComponent: AdminComponent
 
@@ -14,6 +14,6 @@ trait AdminService {
   }
 }
 
-class AdminServiceImpl extends AdminService {
+class AdminDBServiceImpl extends AdminDBService {
   val adminComponent = AdminComponent
 }

@@ -8,8 +8,8 @@ import com.knoldus.dao.components.UserComponent
 import com.knoldus.models.User
 
 
-@ImplementedBy(classOf[UserServiceImpl])
-trait UserService {
+@ImplementedBy(classOf[UserDBServiceImpl])
+trait UserDBService {
 
   val userComponent: UserComponent
 
@@ -30,6 +30,6 @@ trait UserService {
 }
 
 @Singleton
-class UserServiceImpl extends UserService {
+class UserDBServiceImpl extends UserDBService {
   val userComponent = UserComponent
 }
