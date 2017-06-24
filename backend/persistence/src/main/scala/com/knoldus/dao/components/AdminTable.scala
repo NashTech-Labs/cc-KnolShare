@@ -18,5 +18,5 @@ trait AdminTable {
     def * : ProvenShape[Admin] = (id, email, password) <> (Admin.tupled, Admin.unapply)
   }
 
-  val adminTableQuery = TableQuery[AdminTable]
+  lazy val adminTableQuery = TableQuery[AdminTable]
 }

@@ -19,5 +19,5 @@ trait UserTable {
     def * : ProvenShape[User] = (id, userName, email, password, phoneNumber) <> (User.tupled, User.unapply)
   }
 
-  val userTableQuery = TableQuery[UserTable]
+  lazy val userTableQuery = TableQuery[UserTable]
 }
