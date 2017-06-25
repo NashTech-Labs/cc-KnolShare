@@ -3,7 +3,7 @@ package UserHelper
 import org.mindrot.jbcrypt.BCrypt
 
 
-object PassWordUtility {
+class PassWordUtility {
 
   def hashedPassword(password: String): String = {
     BCrypt.hashpw(password, BCrypt.gensalt())

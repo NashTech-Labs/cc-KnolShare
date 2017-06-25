@@ -5,6 +5,7 @@ import javax.inject.Inject
 import scala.concurrent.Future
 
 import UserHelper.{Helper, PassWordUtility}
+import com.knoldus.exceptions.PSqlException.{InsertionError, UserNotFoundException}
 import com.knoldus.models.{User, UserResponse}
 import play.api.cache.CacheApi
 import play.api.libs.concurrent.Execution.Implicits._
@@ -13,7 +14,9 @@ import play.api.mvc.{Action, AnyContent, Controller, Request, Result}
 import service.UserService
 
 
-class UserController @Inject()(val cache: CacheApi, val userService: UserService)
+class UserController @Inject()(val cache: CacheApi,
+    val userService: UserService,
+    val passWordUtility: PassWordUtility)
   extends Controller {
 
   def registerUser: Action[AnyContent] = {
@@ -57,7 +60,7 @@ class UserController @Inject()(val cache: CacheApi, val userService: UserService
       userName: String): Future[Result] = {
     val accessToken = Helper.generateAccessToken
     cache.set(userEmail, accessToken)
-    val user: User = createUserFromJson(userEmail.toLowerCase, phoneNumber, password, userName)
+    val user = createUserFromJson(userEmail.toLowerCase, phoneNumber, password, userName)
     val userResponse = UserResponse(user.userName, user.email, user.phoneNumber)
     userService.createUser(user).flatMap {
       user => {
@@ -68,6 +71,8 @@ class UserController @Inject()(val cache: CacheApi, val userService: UserService
         Future.successful(Ok(
           successResponse(Json.toJson(userResponse))))
       }
+    }.recover {
+      case insertionError: InsertionError => BadRequest(failureResponse(insertionError.message))
     }
   }
 
@@ -78,7 +83,7 @@ class UserController @Inject()(val cache: CacheApi, val userService: UserService
     User(None,
       userName,
       userEmail,
-      PassWordUtility.hashedPassword(password),
+      passWordUtility.hashedPassword(password),
       phoneNumber)
   }
 
@@ -118,7 +123,7 @@ class UserController @Inject()(val cache: CacheApi, val userService: UserService
         val password = (bodyJs \ "password").asOpt[String].getOrElse("")
         userService.validateUser(userEmail).flatMap {
           user => {
-            if (PassWordUtility.verifyPassword(password, user.password)) {
+            if (passWordUtility.verifyPassword(password, user.password)) {
               Future.successful(Ok(
                 successResponse(Json
                   .toJson(UserResponse(user.userName, user.email, user.phoneNumber)))))
@@ -128,6 +133,9 @@ class UserController @Inject()(val cache: CacheApi, val userService: UserService
                 failureResponse("Invalid UserName or Password")))
             }
           }
+        }.recover {
+          case userNotFoundException: UserNotFoundException => BadRequest(failureResponse(
+            userNotFoundException.message))
         }
 
     }

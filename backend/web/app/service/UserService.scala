@@ -36,13 +36,13 @@ class UserService @Inject()(val userDBService: UserDBService) {
         futureUserOpt.map {
           userOpt =>
             userOpt.fold {
-              throw UserNotFoundException("User Not Found")
+              throw UserNotFoundException("User With This Email Does Not Exists")
             } {
               user => user
             }
         }
       }
-      case Failure(_) => throw UserNotFoundException("User Not Found")
+      case Failure(_) => throw UserNotFoundException("User With This Email Does Not Exists")
     }
   }
 }
