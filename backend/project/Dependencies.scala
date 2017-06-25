@@ -47,11 +47,7 @@ object Dependencies {
     slick,
     h2database
   )
-  val processingDependencies: Seq[ModuleID] = playDependencies ++ Seq(
-    kafkaclients,
-    twitter4j,
-    kafkastreams
-  )
+
   object PlayFramework {
     val version = play.core.PlayVersion.current
 
@@ -72,7 +68,6 @@ object Dependencies {
     val mockedMail = "org.jvnet.mock-javamail" % "mock-javamail" % "1.9" % "test"
 
   }
-
 
   object SlackRunner {
     val slackClient = "com.github.gilbertw1" %% "slack-scala-client" % "0.1.8"
@@ -108,10 +103,12 @@ object Dependencies {
       PlayFramework.json,
       PlayFramework.specs2
     )
+
     val mailDependencies = Seq(
       JavaMailer.mail,
       JavaMailer.mockedMail
     )
+
     val webjarsDependencies: Seq[ModuleID] = playDependencies ++ Seq(
       WebJars.webjarsplay,
       WebJars.bootstrap,
@@ -119,17 +116,15 @@ object Dependencies {
       WebJars.jquery,
       WebJars.fontawesome
     )
+
     val notificationDependencies: Seq[ModuleID] = playDependencies ++ mailDependencies
+
     val webDependencies: Seq[ModuleID] = playDependencies ++ webjarsDependencies
+
     val persistenceDependencies: Seq[ModuleID] = playDependencies ++ Seq(
       postgresql,
       slick,
       h2database
-    )
-    val processingDependencies: Seq[ModuleID] = playDependencies ++ Seq(
-      kafkaclients,
-      twitter4j,
-      kafkastreams
     )
 
     object PlayFramework {
