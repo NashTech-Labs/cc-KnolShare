@@ -30,6 +30,7 @@ class TweetConsumerActor @Inject()(configReader: TwitterConfigReader) extends Ac
     props.put("value.deserializer", "org.apache.kafka.common.serialization.LongDeserializer")
     val kafkaConsumer = new KafkaConsumer(props)
     kafkaConsumer.subscribe(Collections.singletonList(kafkaTopic))
+    // scalastyle:off
     while (true) {
       val records = kafkaConsumer.poll(Constants.HUNDRED)
       for (record <- records) {
@@ -37,5 +38,6 @@ class TweetConsumerActor @Inject()(configReader: TwitterConfigReader) extends Ac
       }
       getLogger(this.getClass).info("\n\n===========Consuming Tweets============\n\n")
     }
+    //scalastyle:on
   }
 }

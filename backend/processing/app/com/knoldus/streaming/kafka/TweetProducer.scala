@@ -13,7 +13,6 @@ class TweetProducer @Inject()(configReader: TwitterConfigReader) extends LoggerH
   def send(tweet: String): Boolean = {
     Try {
       val kafkaServers = configReader.getKafkaServers
-      val kafkaTopic = configReader.getKafkaTopic
       val properties = new Properties()
       properties.put("bootstrap.servers", kafkaServers)
       properties.put("acks", "all")
@@ -24,6 +23,8 @@ class TweetProducer @Inject()(configReader: TwitterConfigReader) extends LoggerH
       properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
       properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
       val kafkaProducer = new KafkaProducer[String, String](properties)
+      getLogger(this.getClass).debug("\n\n Started Kafka Producer")
+      val kafkaTopic = configReader.getKafkaTopic
       (kafkaTopic, kafkaProducer)
     } match {
       case Success(data) =>
@@ -31,7 +32,7 @@ class TweetProducer @Inject()(configReader: TwitterConfigReader) extends LoggerH
         producer.send(new ProducerRecord[String, String](kafkaTopic, tweet.toString))
         true
       case Failure(exception) => {
-        getLogger(this.getClass).debug(exception.getMessage)
+        getLogger(this.getClass).error(exception.getMessage)
         false
       }
     }

@@ -14,14 +14,14 @@ val scoverageSettings = Seq(
   "<empty>;controllers.javascript;controllers\\..*Reverse.*;" +
   "com\\.knoldus\\.models\\..*;" +
   "com\\.knoldus\\.utils\\..*;",
-  coverageExcludedFiles := "",
-  coverageMinimum := 80,
-  coverageFailOnMinimum := true
+  coverageExcludedFiles := ""
+//  coverageMinimum := 80,
+//  coverageFailOnMinimum := false
 )
 
 lazy val root = (
   project.in(file("."))
-  aggregate(common, persistence, api, web, processing)
+  aggregate(persistence, api, web, processing, notification)
 )
 
 lazy val common = (

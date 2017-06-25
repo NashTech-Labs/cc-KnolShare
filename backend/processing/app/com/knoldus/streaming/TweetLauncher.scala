@@ -19,11 +19,13 @@ class TweetLauncher @Inject()(environment: Environment, configReader: TwitterCon
   val kafkaStreamProcessor = processingGlobalActor.actorOf(Props(classOf[StreamProcessor], configReader), "KafkaStreamProcessorActor")
   val tweetConsumerActor = processingGlobalActor.actorOf(Props(classOf[TweetConsumerActor], configReader), "TweetConsumerActor")
 
+  // $COVERAGE-OFF$
   if (environment.mode != Mode.Test) {
     tweetProducerActor ! Message(PRODUCE_DATA)
     kafkaStreamProcessor ! Message(PROCESS_DATA)
     tweetConsumerActor ! ConsumeTweetMessage(CONSUME_DATA, kafkaGroupId, kafkaTopic)
   }
+  // $COVERAGE-ON$
 
   processingGlobalActor.terminate()
 }

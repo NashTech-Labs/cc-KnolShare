@@ -14,6 +14,8 @@ object Dependencies {
   val kafkaclients = "org.apache.kafka" % "kafka-clients" % "0.10.2.0"
   val twitter4j = "org.twitter4j" % "twitter4j-stream" % "4.0.6"
   val kafkastreams = "org.apache.kafka" % "kafka-streams" % "0.10.2.0"
+  val akkaTestKit    = "com.typesafe.akka"   %  "akka-testkit_2.11"        % "2.3.11"
+
   val playDependencies: Seq[ModuleID] = Seq(
     PlayFramework.jdbc,
     PlayFramework.cache,
@@ -50,7 +52,8 @@ object Dependencies {
   val processingDependencies: Seq[ModuleID] = playDependencies ++ Seq(
     kafkaclients,
     twitter4j,
-    kafkastreams
+    kafkastreams,
+    akkaTestKit
   )
   object PlayFramework {
     val version = play.core.PlayVersion.current

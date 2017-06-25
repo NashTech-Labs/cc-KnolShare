@@ -17,7 +17,7 @@ class TwitterFeedActor @Inject()(configReader: TwitterConfigReader, tweetProduce
       sendTweetsToKafka()
   }
 
-  def sendTweetsToKafka(): Unit = {
+  private def sendTweetsToKafka(): Boolean = {
 
     val listener = new StatusListener() {
 
@@ -43,9 +43,10 @@ class TwitterFeedActor @Inject()(configReader: TwitterConfigReader, tweetProduce
     val twitterStream = getTwitterConfig
     twitterStream.addListener(listener)
     twitterStream.sample("en")
+    true
   }
 
-  private def getTwitterConfig = {
+  private def getTwitterConfig: TwitterStream = {
     val twitterConf = new ConfigurationBuilder()
       .setOAuthConsumerKey(configReader.getTwitterConsumerKey)
       .setOAuthConsumerSecret(configReader.getTwitterConsumerSecretKey)
