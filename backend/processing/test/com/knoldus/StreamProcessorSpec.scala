@@ -22,6 +22,7 @@ class StreamProcessorSpec extends TestKit(ActorSystem()) with WordSpecLike with 
       mockedConfigReader.getKafkaServers() returns "localhost:9092"
       mockedConfigReader.getKafkaTopic() returns "my-tweet"
       streamProcessorActor ! PROCESS_DATA
+      expectNoMsg()
     }
   }
 

@@ -1,18 +1,19 @@
 package com.knoldus.streaming.twitter
 
 import akka.actor.Actor
-import com.google.inject.{ImplementedBy, Inject}
+import com.google.inject.Inject
 import com.knoldus.models.Message
 import com.knoldus.streaming.kafka.TweetProducer
+import com.knoldus.utils.Constants._
 import com.knoldus.utils.{LoggerHelper, TwitterConfigReader}
 import twitter4j._
 import twitter4j.conf.ConfigurationBuilder
-import com.knoldus.utils.Constants._
 
-class TwitterFeedActor @Inject()(configReader: TwitterConfigReader, tweetProducer: TweetProducer) extends
-  Actor with LoggerHelper {
+class TwitterFeedActor @Inject()(configReader: TwitterConfigReader, tweetProducer: TweetProducer)
+  extends
+    Actor with LoggerHelper {
 
-  override def receive: Receive = {
+  def receive: Receive = {
     case Message(PRODUCE_DATA) =>
       sendTweetsToKafka()
   }
