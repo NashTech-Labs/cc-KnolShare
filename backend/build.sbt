@@ -21,7 +21,7 @@ val scoverageSettings = Seq(
 
 lazy val root = (
   project.in(file("."))
-  aggregate(common, persistence, web, processing)
+  aggregate(persistence, web, processing, notification)
 )
 
 lazy val common = (
