@@ -54,7 +54,9 @@ object Dependencies {
     twitter4j,
     kafkastreams,
     akkaTestKit
-  )
+  ) ++ scalaTestDependencies
+
+
   object PlayFramework {
     val version = play.core.PlayVersion.current
 
