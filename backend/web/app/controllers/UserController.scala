@@ -37,7 +37,7 @@ class UserController @Inject()(val cache: CacheApi, val userService: UserService
         createSuccessResponseJson(userEmail, phoneNumber, password, userName)
       }
       else {
-        Future(Ok(
+        Future(NotFound(
           failureResponse("password and confirm password do not match ")))
       }
     }
@@ -47,7 +47,7 @@ class UserController @Inject()(val cache: CacheApi, val userService: UserService
   }
 
   private def createfailureResponseJson: Future[Result] = {
-    Future(Ok(
+    Future(BadRequest(
       failureResponse("wrong json content ")))
   }
 
@@ -57,7 +57,7 @@ class UserController @Inject()(val cache: CacheApi, val userService: UserService
       userName: String): Future[Result] = {
     val accessToken = Helper.generateAccessToken
     cache.set(userEmail, accessToken)
-    val user: User = createUserFromJson(userEmail, phoneNumber, password, userName)
+    val user: User = createUserFromJson(userEmail.toLowerCase, phoneNumber, password, userName)
     val userResponse = UserResponse(user.userName, user.email, user.phoneNumber)
     userService.createUser(user).flatMap {
       user => {
@@ -124,7 +124,7 @@ class UserController @Inject()(val cache: CacheApi, val userService: UserService
                   .toJson(UserResponse(user.userName, user.email, user.phoneNumber)))))
             }
             else {
-              Future(Ok(
+              Future(NotFound(
                 failureResponse("Invalid UserName or Password")))
             }
           }
