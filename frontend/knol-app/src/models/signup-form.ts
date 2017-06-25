@@ -1,19 +1,15 @@
 export class SignupForm {
+  userName : string;
   email : string;
   password : string;
   confirmPassword : string;
-  firstName : string;
-  middleName : string;
-  lastName : string;
-  phone : number;
+  phoneNumber : number;
 
   constructor() {
+    this.userName = '';
     this.email = '';
     this.password = '';
     this.confirmPassword = '';
-    this.firstName = '';
-    this.lastName = '';
-    this.middleName = '';
-    this.phone = null;
+    this.phoneNumber = null;
   }
 }

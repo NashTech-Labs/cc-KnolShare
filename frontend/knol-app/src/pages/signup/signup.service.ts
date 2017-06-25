@@ -12,14 +12,13 @@ export class SignupService {
   constructor(private http: Http) {}
 
   signup(signupData: SignupForm) {
-    //let headers = new Headers({
-    //  'Content-Type': 'application/json'
-    //});
-    //
-    //return this.http.post('', signupData, {headers: headers})
-    //  .map(res => this.extractData(res))
-    //  .catch(this.handleError);
-    return Observable.of('')
+    let headers = new Headers({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post('http://localhost:9000/knolshare/register', signupData, {headers: headers})
+      .map(res => this.extractData(res))
+      .catch(this.handleError);
   }
 
   private extractData(res: any) {

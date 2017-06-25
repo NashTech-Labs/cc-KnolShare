@@ -1,4 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -11,6 +13,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import {LoginService} from "../pages/login/login.service";
 import {SignupPage} from "../pages/signup/signup";
+import {SharedService} from "../services/shared.service";
 
 @NgModule({
   declarations: [
@@ -21,6 +24,8 @@ import {SignupPage} from "../pages/signup/signup";
   ],
   imports: [
     BrowserModule,
+    CommonModule,
+    FormsModule,
     HttpModule,
     IonicModule.forRoot(MyApp),
   ],
@@ -34,6 +39,7 @@ import {SignupPage} from "../pages/signup/signup";
   providers: [
     StatusBar,
     SplashScreen,
+    SharedService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

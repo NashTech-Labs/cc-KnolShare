@@ -13,17 +13,7 @@
   </ion-item>
   <ion-item>
     <ion-label color="primary" stacked>Enter First Name</ion-label>
-    <ion-input type="text" [(ngModel)]="signupFormObj.firstName" required placeholder="First Name"></ion-input>
-  </ion-item>
-
-  <ion-item>
-    <ion-label color="primary" stacked>Enter Middle Name</ion-label>
-    <ion-input type="text" [(ngModel)]="signupFormObj.middleName" required placeholder="Middle Name"></ion-input>
-  </ion-item>
-
-  <ion-item>
-    <ion-label color="primary" stacked>Enter Last Name</ion-label>
-    <ion-input type="text" [(ngModel)]="signupFormObj.lastName" required placeholder="Last Name"></ion-input>
+    <ion-input type="text" [(ngModel)]="signupFormObj.userName" required placeholder="First Name"></ion-input>
   </ion-item>
 
   <ion-item>
@@ -43,7 +33,7 @@
 
   <ion-item>
     <ion-label color="primary" stacked>Enter Phone Number</ion-label>
-    <ion-input type="number" [(ngModel)]="signupFormObj.phone" required placeholder="Phone Number"></ion-input>
+    <ion-input type="number" [(ngModel)]="signupFormObj.phoneNumber" required placeholder="Phone Number"></ion-input>
   </ion-item>
 
   <button ion-button type="submit" round (click)="submit()">Signup</button>
