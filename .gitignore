@@ -101,3 +101,8 @@ notification/application-log-*.gz
 
 
 backend/.idea
+frontend/.idea
+frontend/knol-app/.idea
+frontend/knol-app/hooks
+frontend/knol-app/node_modules
+frontend/knol-app/www
