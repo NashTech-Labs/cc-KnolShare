@@ -8,9 +8,7 @@ import com.knoldus.models.Admin
 import org.specs2.mock.Mockito
 import play.api.test.PlaySpecification
 
-/**
- * Created by knoldus on 23/6/17.
- */
+
 class AdminDBServiceSpec extends PlaySpecification with Mockito {
 
   val mockedAdminComponent = mock[AdminComponent]

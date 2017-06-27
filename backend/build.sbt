@@ -8,6 +8,8 @@ version := "1.0"
 
 scalaVersion := scala
 
+offline := true
+
 val scoverageSettings = Seq(
   coverageExcludedPackages := "router;" +
   "com\\.knoldus\\.views.*;" +
@@ -37,11 +39,11 @@ lazy val persistence = (
 ) dependsOn common
 
 lazy val web = (
-  playProject("web")
-    settings(libraryDependencies ++= webDependencies)
-    settings(routesGenerator := InjectedRoutesGenerator)
-    settings(scoverageSettings: _*)
-) dependsOn (common,notification)
+                 playProject("web")
+                 settings(libraryDependencies ++= (webDependencies ++ Seq(filters)))
+                 settings(routesGenerator := InjectedRoutesGenerator)
+                 settings(scoverageSettings: _*)
+                 ) dependsOn (common,notification)
 
 lazy val notification = (
   playProject("notification")
