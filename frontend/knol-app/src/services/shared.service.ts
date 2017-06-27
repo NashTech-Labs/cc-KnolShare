@@ -1,11 +1,11 @@
-import {Injectable} from '@angular/core'
+import {Injectable} from "@angular/core"
 
 @Injectable()
 export class SharedService {
   isLoggedIn: boolean = false;
 
   constructor() {
-    if (localStorage.getItem('user')) {
+    if (localStorage.getItem("user")) {
       this.isLoggedIn = true;
     }
   }

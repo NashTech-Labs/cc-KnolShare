@@ -11,7 +11,6 @@ import { LoginPage } from '../pages/login/login';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import {LoginService} from "../pages/login/login.service";
 import {SignupPage} from "../pages/signup/signup";
 import {SharedService} from "../services/shared.service";
 

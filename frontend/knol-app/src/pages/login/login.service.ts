@@ -1,10 +1,10 @@
-import {Http, Headers} from '@angular/http'
-import {Injectable} from '@angular/core'
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
+import {Http, Headers} from "@angular/http"
+import {Injectable} from "@angular/core"
+import {Observable} from "rxjs/Observable";
+import "rxjs/add/observable/of";
+import "rxjs/add/observable/throw";
+import "rxjs/add/operator/catch";
+import "rxjs/add/operator/map";
 import {LoginForm} from "../../models/login-form";
 
 @Injectable()
@@ -13,10 +13,10 @@ export class LoginService {
 
   login(loginData: LoginForm) {
     let headers = new Headers({
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json"
     });
 
-    return this.http.post('http://localhost:9000/knolshare/login', loginData, {headers: headers})
+    return this.http.post("http://localhost:9000/knolshare/login", loginData, {headers: headers})
       .map(res => this.extractData(res))
       .catch(this.handleError);
   }
@@ -37,10 +37,10 @@ export class LoginService {
       if(JSON.parse(error._body).message) {
         errMsg = JSON.parse(error._body).message;
       } else {
-        errMsg = 'Something went wrong. Please try again later.';
+        errMsg = "Something went wrong. Please try again later.";
       }
     } catch(e){
-      errMsg = 'Something went wrong. Please try again later.';
+      errMsg = "Something went wrong. Please try again later.";
     }
     return Observable.throw(new Error(errMsg));
   }

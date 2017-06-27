@@ -1,9 +1,9 @@
 export class SignupForm {
-  userName : string;
-  email : string;
-  password : string;
-  confirmPassword : string;
-  phoneNumber : number;
+  userName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  phoneNumber: number;
 
   constructor() {
     this.userName = '';

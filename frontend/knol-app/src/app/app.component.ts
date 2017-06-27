@@ -1,14 +1,14 @@
-import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
+import { Component, ViewChild } from "@angular/core";
+import { Nav, Platform } from "ionic-angular";
+import { StatusBar } from "@ionic-native/status-bar";
+import { SplashScreen } from "@ionic-native/splash-screen";
 
-import { HomePage } from '../pages/home/home';
-import { LoginPage } from '../pages/login/login';
-import { SignupPage } from '../pages/signup/signup';
+import { HomePage } from "../pages/home/home";
+import { LoginPage } from "../pages/login/login";
+import { SignupPage } from "../pages/signup/signup";
 
 @Component({
-  templateUrl: 'app.html'
+  templateUrl: "app.html"
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
@@ -22,9 +22,9 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'Login', component: LoginPage },
-      { title: 'Signup', component: SignupPage }
+      { title: "Home", component: HomePage },
+      { title: "Login", component: LoginPage },
+      { title: "Signup", component: SignupPage }
     ];
 
   }
@@ -40,7 +40,7 @@ export class MyApp {
 
   openPage(page) {
     // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
+    // we wouldn"t want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
 }
