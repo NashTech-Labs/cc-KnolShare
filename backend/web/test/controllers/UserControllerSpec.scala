@@ -76,10 +76,10 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
     status(result) must equalTo(OK)
     contentType(result) must beSome("application/json")
     contentAsString(result) mustEqual
-    """{"data":{"userName":"anubhav","email":"anubhavtarar40@gmail.com",
-      |"phoneNumber":"8588915184"}}""".stripMargin
+    """{"data":{"userName":"anubhav","email":"anubhavtarar40@gmail.com","phoneNumber":"8588915184"}}""".stripMargin
 
   }
+
   "new user must not get created with invalid user request json" in new WithApplication {
 
     val result = call(userController.registerUser,
@@ -211,8 +211,7 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
     status(result) must equalTo(OK)
     contentType(result) must beSome("application/json")
     contentAsString(result) mustEqual
-    """{"data":{"userName":"anubhav","email":"anubhavtarar40@gmail.com",
-      |"phoneNumber":"8588915184"}}""".stripMargin
+    """{"data":{"userName":"anubhav","email":"anubhavtarar40@gmail.com","phoneNumber":"8588915184"}}""".stripMargin
 
   }
 }
