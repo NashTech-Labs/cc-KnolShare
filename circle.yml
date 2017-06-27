@@ -1,0 +1,23 @@
+database:
+  override:
+    - echo "Skipping DB section."
+
+
+dependencies:
+  override:
+    - cd backend
+
+
+compile:
+  pre:
+    - sbt clean
+  override:
+    - sbt compile
+  post:
+    - sbt test:compile
+
+
+test:
+  override:
+    - sbt test
+

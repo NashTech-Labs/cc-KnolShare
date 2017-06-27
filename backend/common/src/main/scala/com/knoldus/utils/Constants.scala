@@ -5,6 +5,7 @@ package com.knoldus.utils
 object Constants {
 
   val HUNDRED = 100
+  val RATING = 5
 }
 
 //scalastyle:on
