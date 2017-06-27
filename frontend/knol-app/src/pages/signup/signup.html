@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-item>
+    <h3>Signup</h3>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary" stacked>Enter First Name</ion-label>
+    <ion-input type="text" [(ngModel)]="signupFormObj.userName" required placeholder="First Name"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label color="primary" stacked>Enter Email</ion-label>
+    <ion-input type="email" [(ngModel)]="signupFormObj.email" email required placeholder="Email"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label color="primary" stacked>Enter Password</ion-label>
+    <ion-input type="password" [(ngModel)]="signupFormObj.password" password required placeholder="Password"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label color="primary" stacked>Confirm Password</ion-label>
+    <ion-input type="password" [(ngModel)]="signupFormObj.confirmPassword" password required placeholder="Confirm Password"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label color="primary" stacked>Enter Phone Number</ion-label>
+    <ion-input type="number" [(ngModel)]="signupFormObj.phoneNumber" required placeholder="Phone Number"></ion-input>
+  </ion-item>
+
+  <button ion-button type="submit" round (click)="submit()">Signup</button>
+</ion-content>
