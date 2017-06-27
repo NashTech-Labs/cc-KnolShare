@@ -39,7 +39,7 @@ export class SignupService {
       } else {
         errMsg = "Something went wrong. Please try again later.";
       }
-    } catch(e) {
+    } catch (e) {
       errMsg = "Something went wrong. Please try again later.";
     }
     return Observable.throw(new Error(errMsg));
