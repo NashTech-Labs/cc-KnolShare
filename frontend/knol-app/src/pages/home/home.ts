@@ -9,7 +9,7 @@ import {SharedService} from "../../services/shared.service";
   selector: "page-home",
   templateUrl: "home.html"
 })
-export class HomePage implements OnInit{
+export class HomePage implements OnInit {
 
   isLoggedIn: boolean;
   userName: string;
@@ -22,7 +22,7 @@ export class HomePage implements OnInit{
 
   ngOnInit() {
     this.isLoggedIn = this.sharedService.isLoggedIn;
-    if(this.isLoggedIn) {
+    if (this.isLoggedIn) {
       this.userName = JSON.parse(localStorage.getItem("user")).userName;
     }
   }

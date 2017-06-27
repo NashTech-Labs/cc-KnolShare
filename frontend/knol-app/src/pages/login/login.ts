@@ -24,12 +24,12 @@ export class LoginPage {
       console.log(data);
       localStorage.setItem("user", JSON.stringify(data.data));
       this.sharedService.isLoggedIn = true;
-      this.alertController.create({title : "Successfully Logged in", message: ""})
+      this.alertController.create({title : "Successfully Logged in", message: ""});
       this.navCtrl.push(HomePage);
     }, (err: any) => {
       console.log(err);
-      this.alertController.create({title : "Invalid credentials", message: ""})
-    })
+      this.alertController.create({title : "Invalid credentials", message: ""});
+    });
   }
 
 }

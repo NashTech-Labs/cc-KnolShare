@@ -25,11 +25,11 @@ export class SignupPage {
       localStorage.setItem("user", JSON.stringify(data.data));
       this.sharedService.isLoggedIn = true;
       this.navCtrl.push(HomePage);
-      this.alertController.create({title : "Successfully Logged in", message: "signup hogya"})
+      this.alertController.create({title : "Successfully Logged in", message: "signup hogya"});
     }, (err: any) => {
       console.log(err);
-      this.alertController.create({title : "Successfully Logged in", message: "signup hogya"})
-    })
+      this.alertController.create({title : "Successfully Logged in", message: "signup hogya"});
+    });
   }
 
 }
