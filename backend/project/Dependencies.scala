@@ -10,6 +10,7 @@ object Dependencies {
   val logback = "ch.qos.logback" % "logback-classic" % "1.1.3"
   val slick = "com.typesafe.slick" %% "slick" % "3.0.0"
   val postgresql = "org.postgresql" % "postgresql" % "9.4-1201-jdbc41"
+  val passwordUtility =  "org.mindrot" % "jbcrypt" % "0.3m"
   val h2database = "com.h2database" % "h2" % "1.4.187" % "test"
   val kafkaclients = "org.apache.kafka" % "kafka-clients" % "0.10.2.0"
   val twitter4j = "org.twitter4j" % "twitter4j-stream" % "4.0.6"
@@ -45,7 +46,8 @@ object Dependencies {
   val persistenceDependencies: Seq[ModuleID] = playDependencies ++ Seq(
     postgresql,
     slick,
-    h2database
+    h2database,
+    passwordUtility
   )
 
   object PlayFramework {
@@ -122,6 +124,7 @@ object Dependencies {
     val webDependencies: Seq[ModuleID] = playDependencies ++ webjarsDependencies
 
     val persistenceDependencies: Seq[ModuleID] = playDependencies ++ Seq(
+      passwordUtility,
       postgresql,
       slick,
       h2database

@@ -2,7 +2,7 @@ CREATE TABLE users(
   id BIGSERIAL PRIMARY KEY,
   username varchar(50) NOT NULL ,
   email varchar(50) NOT NULL ,
-  password varchar(50) NOT NULL,
+  password varchar(500) NOT NULL,
   phone_num varchar(10)
 );
 

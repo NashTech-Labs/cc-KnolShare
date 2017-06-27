@@ -1,7 +1,6 @@
 package services
 
-import api.{MailApi, SlackApi}
-import org.mockito.Mock
+import api.MailApi
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.{MustMatchers, WordSpecLike}
