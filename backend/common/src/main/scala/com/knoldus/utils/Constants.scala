@@ -3,7 +3,6 @@ package com.knoldus.utils
 //scalastyle:off
 
 object Constants {
-
   val HUNDRED = 100
   val TEN = 10
   val RATING = 5
@@ -13,7 +12,9 @@ object Constants {
   val TWO = 2
   val THREE =   3
   val FOUR = 4
-
+  val CONSUME_DATA = "ConsumeData"
+  val PROCESS_DATA = "ProcessData"
+  val PRODUCE_DATA = "ProduceData"
 }
 
 //scalastyle:on

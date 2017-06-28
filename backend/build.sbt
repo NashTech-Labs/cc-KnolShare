@@ -39,11 +39,11 @@ lazy val persistence = (
 ) dependsOn common
 
 lazy val web = (
-                 playProject("web")
-                 settings(libraryDependencies ++= (webDependencies ++ Seq(filters)))
-                 settings(routesGenerator := InjectedRoutesGenerator)
-                 settings(scoverageSettings: _*)
-                 ) dependsOn (common,notification)
+  playProject("web")
+    settings(libraryDependencies ++= (webDependencies ++ Seq(filters)))
+    settings(routesGenerator := InjectedRoutesGenerator)
+    settings(scoverageSettings: _*)
+  ) dependsOn (common,notification)
 
 lazy val notification = (
   playProject("notification")
@@ -52,3 +52,9 @@ lazy val notification = (
     settings(scoverageSettings: _*)
   ) dependsOn persistence
 
+lazy val processing = (
+  playProject("processing")
+    settings(libraryDependencies ++= processingDependencies)
+    settings(routesGenerator := InjectedRoutesGenerator)
+    settings(scoverageSettings: _*)
+  ) dependsOn (common)
