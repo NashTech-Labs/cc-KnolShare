@@ -4,20 +4,21 @@ import javax.inject.Inject
 
 import scala.concurrent.Future
 
-import UserHelper.{Helper, PassWordUtility}
 import com.knoldus.exceptions.PSqlException.{InsertionError, UserNotFoundException}
 import com.knoldus.models.{User, UserResponse}
+import controllers.security.SecuredAction
 import play.api.cache.CacheApi
 import play.api.libs.concurrent.Execution.Implicits._
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsString, JsValue, Json}
 import play.api.mvc.{Action, AnyContent, Controller, Request, Result}
 import service.UserService
+import userHelper.{Helper, PassWordUtility}
 
 
-class UserController @Inject()(val cache: CacheApi,
+class UserController @Inject()(
     val userService: UserService,
-    val passWordUtility: PassWordUtility)
-  extends Controller {
+    val passWordUtility: PassWordUtility, accessTokenHelper: Helper)
+  extends Controller with SecuredAction {
 
   def registerUser: Action[AnyContent] = {
     Action.async {
@@ -45,11 +46,11 @@ class UserController @Inject()(val cache: CacheApi,
       }
     }
     else {
-      createfailureResponseJson
+      createFailureResponseJson
     }
   }
 
-  private def createfailureResponseJson: Future[Result] = {
+  private def createFailureResponseJson: Future[Result] = {
     Future(BadRequest(
       failureResponse("wrong json content ")))
   }
@@ -58,18 +59,19 @@ class UserController @Inject()(val cache: CacheApi,
       phoneNumber: String,
       password: String,
       userName: String): Future[Result] = {
-    val accessToken = Helper.generateAccessToken
-    cache.set(userEmail, accessToken)
     val user = createUserFromJson(userEmail.toLowerCase, phoneNumber, password, userName)
     val userResponse = UserResponse(user.userName, user.email, user.phoneNumber)
     userService.createUser(user).flatMap {
-      user => {
-        userService.sendMail(List(userEmail), "Confirm your Registration", "Click below " +
-                                                                           "to confirm user " +
-                                                                           "registration:\nhttp://www.realaddressgoeshere.com/registerer/" +
-                                                                           "activateuser?token=sometokengoesher")
+      _ => {
+        userService
+          .sendMail(List(userEmail),
+            "Confirm your Registration",
+            "Congratulations !! \nYou have successfully completed your registration process")
+
+        val accessToken = accessTokenHelper.generateAccessToken
         Future.successful(Ok(
-          successResponse(Json.toJson(userResponse))))
+          successResponse(userResponse.toJson, Some(JsString(accessToken))))
+          .withSession("accessToken" -> accessToken))
       }
     }.recover {
       case insertionError: InsertionError => BadRequest(failureResponse(insertionError.message))
@@ -87,8 +89,12 @@ class UserController @Inject()(val cache: CacheApi,
       phoneNumber)
   }
 
-  private def successResponse(data: JsValue) = {
-    Json.obj("data" -> data)
+  private def successResponse(data: JsValue, accessTokenOpt: Option[JsString]) = {
+    if (accessTokenOpt.isDefined) {
+      Json.obj("data" -> data, "accessToken" -> accessTokenOpt.fold(JsString(""))(identity))
+    } else {
+      Json.obj("data" -> data)
+    }
   }
 
   private def validateFields(fields: List[String]): Boolean = fields.forall(_.nonEmpty)
@@ -100,12 +106,13 @@ class UserController @Inject()(val cache: CacheApi,
   private def extractJsonFromRequest(request: Request[AnyContent]): (String, String, String,
     String, String,
     List[String]) = {
+
     val bodyJs = request.body.asJson.getOrElse(Json.parse(""))
-    val userEmail = (bodyJs \ "email").asOpt[String].getOrElse("")
-    val phoneNumber = (bodyJs \ "phoneNumber").asOpt[String].getOrElse("")
-    val password = (bodyJs \ "password").asOpt[String].getOrElse("")
-    val confirmPassword = (bodyJs \ "confirmPassword").asOpt[String].getOrElse("")
-    val userName = (bodyJs \ "userName").asOpt[String].getOrElse("")
+    val userEmail = (bodyJs \ "email").asOpt[String].fold("")(identity)
+    val phoneNumber = (bodyJs \ "phoneNumber").asOpt[String].fold("")(identity)
+    val password = (bodyJs \ "password").asOpt[String].fold("")(identity)
+    val confirmPassword = (bodyJs \ "confirmPassword").asOpt[String].fold("")(identity)
+    val userName = (bodyJs \ "userName").asOpt[String].fold("")(identity)
     val listFields = List(userEmail,
       userName,
       userEmail,
@@ -119,14 +126,15 @@ class UserController @Inject()(val cache: CacheApi,
     Action.async {
       implicit request =>
         val bodyJs = request.body.asJson.getOrElse(Json.parse(""))
-        val userEmail = (bodyJs \ "email").asOpt[String].getOrElse("")
-        val password = (bodyJs \ "password").asOpt[String].getOrElse("")
+        val userEmail = (bodyJs \ "email").asOpt[String].fold("")(identity)
+        val password = (bodyJs \ "password").asOpt[String].fold("")(identity)
         userService.validateUser(userEmail).flatMap {
           user => {
             if (passWordUtility.verifyPassword(password, user.password)) {
+              val accessToken = accessTokenHelper.generateAccessToken
               Future.successful(Ok(
-                successResponse(Json
-                  .toJson(UserResponse(user.userName, user.email, user.phoneNumber)))))
+                successResponse(UserResponse(user.userName, user.email, user.phoneNumber).toJson,
+                  Some(JsString(accessToken)))).withSession("accessToken" -> accessToken))
             }
             else {
               Future(NotFound(
