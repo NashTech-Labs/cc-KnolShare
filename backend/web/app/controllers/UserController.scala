@@ -6,6 +6,7 @@ import scala.concurrent.Future
 
 import com.knoldus.exceptions.PSqlException.{InsertionError, UserNotFoundException}
 import com.knoldus.models.{User, UserResponse}
+import com.knoldus.utils.JsonResponse
 import controllers.security.SecuredAction
 import play.api.cache.CacheApi
 import play.api.libs.concurrent.Execution.Implicits._
@@ -17,7 +18,7 @@ import userHelper.{Helper, PassWordUtility}
 
 class UserController @Inject()(
     val userService: UserService,
-    val passWordUtility: PassWordUtility, accessTokenHelper: Helper)
+    val passWordUtility: PassWordUtility, accessTokenHelper: Helper, jsonResponse: JsonResponse)
   extends Controller with SecuredAction {
 
   def registerUser: Action[AnyContent] = {
@@ -42,7 +43,7 @@ class UserController @Inject()(
       }
       else {
         Future(NotFound(
-          failureResponse("password and confirm password do not match ")))
+          jsonResponse.failureResponse("password and confirm password do not match ")))
       }
     }
     else {
@@ -52,7 +53,7 @@ class UserController @Inject()(
 
   private def createFailureResponseJson: Future[Result] = {
     Future(BadRequest(
-      failureResponse("wrong json content ")))
+      jsonResponse.failureResponse("wrong json content ")))
   }
 
   private def createSuccessResponseJson(userEmail: String,
@@ -70,11 +71,11 @@ class UserController @Inject()(
 
         val accessToken = accessTokenHelper.generateAccessToken
         Future.successful(Ok(
-          successResponse(userResponse.toJson, Some(JsString(accessToken))))
+          jsonResponse.successResponse(userResponse.toJson, Some(JsString(accessToken))))
           .withSession("accessToken" -> accessToken))
       }
     }.recover {
-      case insertionError: InsertionError => BadRequest(failureResponse(insertionError.message))
+      case insertionError: InsertionError => BadRequest(jsonResponse.failureResponse(insertionError.message))
     }
   }
 
@@ -89,19 +90,7 @@ class UserController @Inject()(
       phoneNumber)
   }
 
-  private def successResponse(data: JsValue, accessTokenOpt: Option[JsString]) = {
-    if (accessTokenOpt.isDefined) {
-      Json.obj("data" -> data, "accessToken" -> accessTokenOpt.fold(JsString(""))(identity))
-    } else {
-      Json.obj("data" -> data)
-    }
-  }
-
   private def validateFields(fields: List[String]): Boolean = fields.forall(_.nonEmpty)
-
-  private def failureResponse(error: String) = {
-    Json.obj("error" -> Json.obj("message" -> error))
-  }
 
   private def extractJsonFromRequest(request: Request[AnyContent]): (String, String, String,
     String, String,
@@ -133,16 +122,16 @@ class UserController @Inject()(
             if (passWordUtility.verifyPassword(password, user.password)) {
               val accessToken = accessTokenHelper.generateAccessToken
               Future.successful(Ok(
-                successResponse(UserResponse(user.userName, user.email, user.phoneNumber).toJson,
+                jsonResponse.successResponse(UserResponse(user.userName, user.email, user.phoneNumber).toJson,
                   Some(JsString(accessToken)))).withSession("accessToken" -> accessToken))
             }
             else {
               Future(NotFound(
-                failureResponse("Invalid UserName or Password")))
+                jsonResponse.failureResponse("Invalid UserName or Password")))
             }
           }
         }.recover {
-          case userNotFoundException: UserNotFoundException => BadRequest(failureResponse(
+          case userNotFoundException: UserNotFoundException => BadRequest(jsonResponse.failureResponse(
             userNotFoundException.message))
         }
 

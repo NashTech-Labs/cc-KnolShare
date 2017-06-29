@@ -3,10 +3,11 @@ package controllers
 import scala.concurrent.Future
 
 import com.knoldus.exceptions.PSqlException.{InsertionError, UserNotFoundException}
-import com.knoldus.models.User
+import com.knoldus.models.{User, UserResponse}
+import com.knoldus.utils.JsonResponse
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.test.{FakeRequest, PlaySpecification, WithApplication}
 import service.UserService
 import userHelper.{Helper, PassWordUtility}
@@ -15,6 +16,7 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
 
   private val mockedHelper = mock[Helper]
 
+  private val mockedJsonResponse = mock[JsonResponse]
 
   private val mockedUserService = mock[UserService]
 
@@ -46,19 +48,23 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
 
   private val emptyJsonForLogin = """{"email":"", "password":""}""".stripMargin
 
-
+//TODO: Remove JsonResponse with a mocked object
   private val userController = new UserController(
     mockedUserService,
-    mockedPasswordUtility, mockedHelper)
+    mockedPasswordUtility, mockedHelper, JsonResponse)
 
   private val json = Json.parse(userRequestJson)
 
   private val user = User(None, "anubhav", "anubhavtarar40@gmail.com", "anubhav", "8588915184")
 
+  private val userResponse = UserResponse("anubhav", "anubhavtarar40@gmail.com","8588915184")
+
   "new user must get created with valid user request json" in new WithApplication {
+
+    val res: JsValue = Json.parse("""{"data":{"userName":"anubhav","email":"anubhavtarar40@gmail.com","phoneNumber":"8588915184"},"accessToken":"accessToken"}""")
     when(mockedPasswordUtility.hashedPassword("anubhav")).thenReturn("anubhav")
     when(mockedHelper.generateAccessToken).thenReturn("accessToken")
-
+when(mockedJsonResponse.successResponse(userResponse.toJson, Some(JsString("accessToken")))).thenReturn(res.as[JsObject])
     when(mockedUserService.createUser(user)).thenReturn(Future.successful(user))
 
     when(mockedUserService.validatePassWord("anubhav", "anubhav")).thenReturn(true)
