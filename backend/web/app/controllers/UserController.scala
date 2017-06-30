@@ -8,7 +8,6 @@ import com.knoldus.exceptions.PSqlException.{InsertionError, UserNotFoundExcepti
 import com.knoldus.models.{User, UserResponse}
 import com.knoldus.utils.JsonResponse
 import controllers.security.SecuredAction
-import play.api.cache.CacheApi
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.{JsString, JsValue, Json}
 import play.api.mvc.{Action, AnyContent, Controller, Request, Result}
