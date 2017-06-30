@@ -6,12 +6,8 @@ import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 @ImplementedBy(classOf[JsonResponseImpl])
 trait JsonResponse {
 
-   def successResponse(data: JsValue, accessTokenOpt: Option[JsString]): JsObject = {
-    if (accessTokenOpt.isDefined) {
-      Json.obj("data" -> data, "accessToken" -> accessTokenOpt.fold(JsString(""))(identity))
-    } else {
+   def successResponse(data: JsValue): JsObject = {
       Json.obj("data" -> data)
-    }
   }
 
   def failureResponse(error: String): JsObject = {

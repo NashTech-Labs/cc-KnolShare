@@ -64,7 +64,7 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
     val res: JsValue = Json.parse("""{"data":{"userName":"anubhav","email":"anubhavtarar40@gmail.com","phoneNumber":"8588915184"},"accessToken":"accessToken"}""")
     when(mockedPasswordUtility.hashedPassword("anubhav")).thenReturn("anubhav")
     when(mockedHelper.generateAccessToken).thenReturn("accessToken")
-when(mockedJsonResponse.successResponse(userResponse.toJson, Some(JsString("accessToken")))).thenReturn(res.as[JsObject])
+//when(mockedJsonResponse.successResponse(userResponse.toJson, Some(JsString("accessToken")))).thenReturn(res.as[JsObject])
     when(mockedUserService.createUser(user)).thenReturn(Future.successful(user))
 
     when(mockedUserService.validatePassWord("anubhav", "anubhav")).thenReturn(true)
@@ -84,7 +84,7 @@ when(mockedJsonResponse.successResponse(userResponse.toJson, Some(JsString("acce
     status(result) must equalTo(OK)
     contentType(result) must beSome("application/json")
     contentAsString(result) mustEqual
-    """{"data":{"userName":"anubhav","email":"anubhavtarar40@gmail.com","phoneNumber":"8588915184"},"accessToken":"accessToken"}"""
+    """{"data":{"user":{"userName":"anubhav","email":"anubhavtarar40@gmail.com","phoneNumber":"8588915184"},"accessToken":"accessToken"}}"""
       .stripMargin
 
   }
@@ -221,7 +221,7 @@ when(mockedJsonResponse.successResponse(userResponse.toJson, Some(JsString("acce
     status(result) must equalTo(OK)
     contentType(result) must beSome("application/json")
     contentAsString(result) mustEqual
-    """{"data":{"userName":"anubhav","email":"anubhavtarar40@gmail.com","phoneNumber":"8588915184"},"accessToken":"accessToken"}"""
+    """{"data":{"user":{"userName":"anubhav","email":"anubhavtarar40@gmail.com","phoneNumber":"8588915184"},"accessToken":"accessToken"}}"""
       .stripMargin
 
   }

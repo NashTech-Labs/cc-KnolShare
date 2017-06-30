@@ -71,7 +71,7 @@ class UserController @Inject()(
 
         val accessToken = accessTokenHelper.generateAccessToken
         Future.successful(Ok(
-          jsonResponse.successResponse(userResponse.toJson, Some(JsString(accessToken))))
+          jsonResponse.successResponse(Json.obj("user" -> userResponse.toJson, "accessToken" -> JsString(accessToken))))
           .withSession("accessToken" -> accessToken))
       }
     }.recover {
@@ -122,8 +122,8 @@ class UserController @Inject()(
             if (passWordUtility.verifyPassword(password, user.password)) {
               val accessToken = accessTokenHelper.generateAccessToken
               Future.successful(Ok(
-                jsonResponse.successResponse(UserResponse(user.userName, user.email, user.phoneNumber).toJson,
-                  Some(JsString(accessToken)))).withSession("accessToken" -> accessToken))
+                jsonResponse.successResponse(Json.obj("user" -> UserResponse(user.userName, user.email, user.phoneNumber).toJson,
+                  "accessToken" -> JsString(accessToken)))).withSession("accessToken" -> accessToken))
             }
             else {
               Future(NotFound(
