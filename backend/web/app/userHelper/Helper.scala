@@ -1,11 +1,12 @@
-package UserHelper
+package userHelper
 
 import scala.util.Random
 
+import com.google.inject.ImplementedBy
 import com.knoldus.utils.Constants
 
-
-object Helper {
+@ImplementedBy(classOf[HelperImpl])
+trait Helper {
 
   def generateAccessToken: String = Random.alphanumeric.take(Constants.TEN).mkString("")
 
@@ -14,3 +15,7 @@ object Helper {
       .equals(confirmPassword)
   }
 }
+
+class HelperImpl extends Helper
+
+object Helper extends Helper

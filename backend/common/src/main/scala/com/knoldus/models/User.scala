@@ -1,5 +1,6 @@
 package com.knoldus.models
 
+import com.knoldus.utils.JsonHelper._
 import play.api.libs.json.Json
 
 
@@ -16,7 +17,6 @@ case class UserResponse(
     userName: String,
     email: String,
     phoneNumber: String
-)
-object UserResponse {
-  implicit val userFormat = Json.format[UserResponse]
+) {
+  lazy val toJson = Json.toJson(this)
 }
