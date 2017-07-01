@@ -5,7 +5,7 @@ export class SharedService {
   isLoggedIn: boolean = false;
 
   constructor() {
-    if (localStorage.getItem("user")) {
+    if (localStorage.getItem("user") && localStorage.getItem("accessToken")) {
       this.isLoggedIn = true;
     }
   }
