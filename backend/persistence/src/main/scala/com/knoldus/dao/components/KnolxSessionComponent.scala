@@ -40,6 +40,12 @@ trait KnolxSessionComponent extends KnolxSessionTable {
   def getKnolxByPresentor(presentor: String): Future[Option[KnolxSession]] = {
     db.run(knolxSessionTableQuery.filter(_.presentor === presentor).result.headOption)
   }
+
+
+  def getKnolxByNameAndDate(name: String, date: Date): Future[Option[KnolxSession]] = {
+    db.run(knolxSessionTableQuery.filter(x => (x.presentor === name && x.date === date)).result.headOption)
+  }
+
 }
 
 object KnolxSessionComponent extends KnolxSessionComponent with PostgresDBComponent
