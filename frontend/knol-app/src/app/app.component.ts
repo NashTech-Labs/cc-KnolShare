@@ -11,7 +11,7 @@ import {SharedService} from "../services/shared.service";
 @Component({
   templateUrl: "app.html"
 })
-export class MyApp implements OnInit{
+export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = HomePage;
@@ -33,17 +33,15 @@ export class MyApp implements OnInit{
 
   }
 
-  ngOnInit() {
-    this.isLoggedIn = this.sharedService.isLoggedIn;
-  }
-
   logout() {
-    this.sharedService.logout().subscribe((data: any) => {
-      this.sharedService.clearStorage();
-      this.isLoggedIn = false;
-    }, (err: any) => {
-      console.error(err);
-    })
+    //this.sharedService.logout().subscribe((data: any) => {
+    //  this.sharedService.clearStorage();
+    //  this.isLoggedIn = false;
+    //}, (err: any) => {
+    //  console.error(err);
+    //})
+    this.sharedService.clearStorage();
+
   }
 
   initializeApp() {

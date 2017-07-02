@@ -8,11 +8,11 @@
   <ion-content>
     <ion-list>
       <div *ngFor="let p of pages">
-        <button *ngIf="!isLoggedIn" menuClose ion-item (click)="openPage(p)">
+        <button *ngIf="!sharedService.isLoggedIn" menuClose ion-item (click)="openPage(p)">
           {{p.title}}
         </button>
       </div>
-      <button *ngIf="isLoggedIn" menuClose ion-item (click)="logout()">
+      <button *ngIf="sharedService.isLoggedIn" menuClose ion-item (click)="logout()">
         Logout
       </button>
     </ion-list>

@@ -12,7 +12,6 @@ import {SharedService} from "../../services/shared.service";
 })
 export class HomePage implements OnInit {
 
-  isLoggedIn: boolean;
   userName: string;
   pages = {
     "Login": LoginPage,
@@ -23,8 +22,7 @@ export class HomePage implements OnInit {
   constructor(public navCtrl: NavController, private sharedService: SharedService) {}
 
   ngOnInit() {
-    this.isLoggedIn = this.sharedService.isLoggedIn;
-    if (this.isLoggedIn) {
+    if (this.sharedService.isLoggedIn) {
       this.userName = JSON.parse(localStorage.getItem("user")).userName;
     }
   }

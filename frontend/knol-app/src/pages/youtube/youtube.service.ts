@@ -43,8 +43,8 @@ export class YoutubeService {
   private handleError(error: any) {
     let errMsg: string;
     try {
-      if (JSON.parse(error._body).message) {
-        errMsg = JSON.parse(error._body).message;
+      if (JSON.parse(error._body).error) {
+        errMsg = JSON.parse(error._body).error.message;
       } else {
         errMsg = "Something went wrong. Please try again later.";
       }

@@ -28,6 +28,7 @@ export class YoutubePage implements OnInit{
         }
       }
     }, (err: any) => {
+      alert(err);
       console.error(err);
     })
   }
@@ -52,6 +53,7 @@ export class YoutubePage implements OnInit{
         }
       }
     }, (err: any) => {
+      alert(err);
       console.error(err);
     })
   }
@@ -68,6 +70,7 @@ export class YoutubePage implements OnInit{
         }
       }
     }, (err: any) => {
+      alert(err);
       console.error(err);
     })
   }
