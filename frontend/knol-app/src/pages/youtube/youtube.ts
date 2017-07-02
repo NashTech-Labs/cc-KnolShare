@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { NavController } from "ionic-angular";
 import {YoutubeService} from "./youtube.service";
+import {YoutubePreviewPage} from "./youtube-preview";
 
 @Component({
   selector: "page-youtube",
@@ -19,7 +20,6 @@ export class YoutubePage implements OnInit{
     this.youtubeService.getVideos().subscribe((data: any) => {
       this.items = data.items;
       this.youtubeData = data;
-      localStorage.setItem('videoData', JSON.stringify(this.youtubeData));
       for(let i=0; i < this.items.length; i++) {
         if(this.items[i].id) {
           if(this.items[i].id.videoId) {
@@ -32,18 +32,18 @@ export class YoutubePage implements OnInit{
     })
   }
 
-  goToPreviewPage(i) {
-
+  goToPreviewPage(i: number) {
+    if(localStorage.getItem('videoData')) {
+      localStorage.removeItem('videoData')
+    }
+    localStorage.setItem('videoData', JSON.stringify(this.items[i]));
+    this.navCtrl.push(YoutubePreviewPage);
   }
 
   previousPage(){
     this.youtubeService.getVideos(null, this.youtubeData.prevPageToken).subscribe((data: any) => {
       this.items = data.items;
       this.youtubeData = data;
-      if(localStorage.getItem('videoData')) {
-        localStorage.removeItem('videoData')
-      }
-      localStorage.setItem('videoData', JSON.stringify(this.youtubeData));
       for(let i=0; i < this.items.length; i++) {
         if(this.items[i].id) {
           if(this.items[i].id.videoId) {
@@ -60,10 +60,6 @@ export class YoutubePage implements OnInit{
     this.youtubeService.getVideos(this.youtubeData.nextPageToken).subscribe((data: any) => {
       this.items = data.items;
       this.youtubeData = data;
-      if(localStorage.getItem('videoData')) {
-        localStorage.removeItem('videoData')
-      }
-      localStorage.setItem('videoData', JSON.stringify(this.youtubeData));
       for(let i=0; i < this.items.length; i++) {
         if(this.items[i].id) {
           if(this.items[i].id.videoId) {

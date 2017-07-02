@@ -11,15 +11,22 @@ declare var YT: any;
 })
 export class YoutubePreviewPage implements OnInit {
   player: any;
-
+  title: string;
+  description: string;
+  videoId: string;
   ngOnInit() {
-    this.player = new YT.Player('player', {
-      videoId: 'videoId',
-      playerVars: {
-        rel: 0,
-        controls: 0
-      }
-    });
+    if(localStorage.getItem("videoData")) {
+      this.videoId = JSON.parse(localStorage.getItem("videoData")).id.videoId;
+      this.title = JSON.parse(localStorage.getItem("videoData")).snippet.title;
+      this.description = JSON.parse(localStorage.getItem("videoData")).snippet.description;
+      this.player = new YT.Player('player', {
+        videoId: this.videoId,
+        playerVars: {
+          rel: 0
+        }
+      });
+    }
+
   }
 
 }
