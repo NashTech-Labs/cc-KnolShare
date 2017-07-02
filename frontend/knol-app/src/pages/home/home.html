@@ -14,10 +14,10 @@
   <h3 *ngIf="isLoggedIn">Hi {{userName}}, Welcome to the application.</h3>
   <div *ngIf="!isLoggedIn">
     <button ion-button round (click)="goToPage('Login')">Login</button>
-    <button ion-button round (click)="goToPage('Youtube')">Youtube</button>
     <button ion-button round (click)="goToPage('Signup')">Signup</button>
   </div>
   <div *ngIf="isLoggedIn">
+    <button ion-button round (click)="goToPage('Youtube')">Youtube</button>
   </div>
   <!--<button ion-button secondary menuToggle>Toggle Menu</button>-->
 </ion-content>

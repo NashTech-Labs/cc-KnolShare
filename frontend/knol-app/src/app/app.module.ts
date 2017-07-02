@@ -14,6 +14,7 @@ import { SplashScreen } from "@ionic-native/splash-screen";
 import {SignupPage} from "../pages/signup/signup";
 import {SharedService} from "../services/shared.service";
 import {YoutubePage} from "../pages/youtube/youtube";
+import {YoutubePreviewPage} from "../pages/youtube/youtube-preview";
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import {YoutubePage} from "../pages/youtube/youtube";
     HomePage,
     SignupPage,
     LoginPage,
-    YoutubePage
+    YoutubePage,
+    YoutubePreviewPage
   ],
   imports: [
     BrowserModule,
@@ -37,7 +39,8 @@ import {YoutubePage} from "../pages/youtube/youtube";
     HomePage,
     SignupPage,
     LoginPage,
-    YoutubePage
+    YoutubePage,
+    YoutubePreviewPage
   ],
   providers: [
     StatusBar,
