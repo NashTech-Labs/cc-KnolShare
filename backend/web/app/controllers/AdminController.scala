@@ -28,7 +28,10 @@ class AdminController @Inject()(adminService: AdminService,
             if (passWordUtility.verifyPassword(password, admin.password)) {
               val accessToken = accessTokenHelper.generateAccessToken
               Future.successful(Ok(
-                jsonResponse.successResponse(Json.obj("admin" -> Json.obj("email"->JsString(admin.email)), "accessToken" -> JsString(accessToken))))
+                jsonResponse
+                  .successResponse(Json
+                    .obj("admin" -> Json.obj("email" -> JsString(admin.email)),
+                      "accessToken" -> JsString(accessToken))))
                 .withSession("accessToken" -> accessToken))
             }
             else {

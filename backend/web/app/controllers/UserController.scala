@@ -70,11 +70,14 @@ class UserController @Inject()(
 
         val accessToken = accessTokenHelper.generateAccessToken
         Future.successful(Ok(
-          jsonResponse.successResponse(Json.obj("user" -> userResponse.toJson, "accessToken" -> JsString(accessToken))))
+          jsonResponse
+            .successResponse(Json
+              .obj("user" -> userResponse.toJson, "accessToken" -> JsString(accessToken))))
           .withSession("accessToken" -> accessToken))
       }
     }.recover {
-      case insertionError: InsertionError => BadRequest(jsonResponse.failureResponse(insertionError.message))
+      case insertionError: InsertionError => BadRequest(jsonResponse
+        .failureResponse(insertionError.message))
     }
   }
 
@@ -121,8 +124,11 @@ class UserController @Inject()(
             if (passWordUtility.verifyPassword(password, user.password)) {
               val accessToken = accessTokenHelper.generateAccessToken
               Future.successful(Ok(
-                jsonResponse.successResponse(Json.obj("user" -> UserResponse(user.userName, user.email, user.phoneNumber).toJson,
-                  "accessToken" -> JsString(accessToken)))).withSession("accessToken" -> accessToken))
+                jsonResponse
+                  .successResponse(Json
+                    .obj("user" -> UserResponse(user.userName, user.email, user.phoneNumber).toJson,
+                      "accessToken" -> JsString(accessToken))))
+                .withSession("accessToken" -> accessToken))
             }
             else {
               Future(NotFound(
@@ -130,10 +136,21 @@ class UserController @Inject()(
             }
           }
         }.recover {
-          case userNotFoundException: UserNotFoundException => BadRequest(jsonResponse.failureResponse(
-            userNotFoundException.message))
+          case userNotFoundException: UserNotFoundException => BadRequest(jsonResponse
+            .failureResponse(
+              userNotFoundException.message))
         }
 
+    }
+  }
+
+  def logout: Action[AnyContent] = {
+    UserAction.async {
+      implicit request =>
+        request.session.-("accessToken")
+        Future
+          .successful(Ok(jsonResponse
+            .successResponse(Json.obj("message" -> JsString("User Logged Out successfully !!")))))
     }
   }
 }

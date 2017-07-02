@@ -61,7 +61,9 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
 
   "new user must get created with valid user request json" in new WithApplication {
 
-    val res: JsValue = Json.parse("""{"data":{"userName":"anubhav","email":"anubhavtarar40@gmail.com","phoneNumber":"8588915184"},"accessToken":"accessToken"}""")
+    val res: JsValue = Json.parse(
+      """{"data":{"userName":"anubhav","email":"anubhavtarar40@gmail.com",
+        |"phoneNumber":"8588915184"},"accessToken":"accessToken"}""".stripMargin)
     when(mockedPasswordUtility.hashedPassword("anubhav")).thenReturn("anubhav")
     when(mockedHelper.generateAccessToken).thenReturn("accessToken")
 //when(mockedJsonResponse.successResponse(userResponse.toJson, Some(JsString("accessToken")))).thenReturn(res.as[JsObject])
@@ -224,5 +226,23 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
     """{"data":{"user":{"userName":"anubhav","email":"anubhavtarar40@gmail.com","phoneNumber":"8588915184"},"accessToken":"accessToken"}}"""
       .stripMargin
 
+  }
+
+  "user must be able to logout" in new WithApplication {
+    val result = call(userController.logout, FakeRequest(GET, "/knolshare/logout")
+      .withSession("accessToken" -> "accessToken").withHeaders("accessToken" -> "accessToken"))
+    status(result) must equalTo(OK)
+    contentType(result) must beSome("application/json")
+    contentAsString(result) mustEqual
+    """{"data":{"message":"User Logged Out successfully !!"}}"""
+      .stripMargin
+  }
+
+  "unsuccessfull logout " in new WithApplication {
+    val result = call(userController.logout, FakeRequest(GET, "/knolshare/logout")
+      .withSession("accessToken" -> "accessToken"))
+    status(result) must equalTo(UNAUTHORIZED)
+    contentType(result) must beSome("text/plain")
+    contentAsString(result) mustEqual "Unauthorized Access !!"
   }
 }
