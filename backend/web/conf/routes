@@ -13,3 +13,5 @@ POST        /knolshare/register           controllers.UserController.registerUse
 POST        /knolshare/login              controllers.UserController.validateLogin
 
 POST        /knolshare/admin/login        controllers.AdminController.validateLogin
+
+GET         /knolshare/logout             controllers.UserController.logout
