@@ -147,10 +147,9 @@ class UserController @Inject()(
   def logout: Action[AnyContent] = {
     UserAction.async {
       implicit request =>
-        request.session.-("accessToken")
         Future
           .successful(Ok(jsonResponse
-            .successResponse(Json.obj("message" -> JsString("User Logged Out successfully !!")))))
+            .successResponse(Json.obj("message" -> JsString("User Logged Out successfully !!")))).withNewSession)
     }
   }
 }
