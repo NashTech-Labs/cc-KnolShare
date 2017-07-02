@@ -5,28 +5,27 @@ import "rxjs/add/observable/of";
 import "rxjs/add/observable/throw";
 import "rxjs/add/operator/catch";
 import "rxjs/add/operator/map";
+import {SignupForm} from "../../models/signup-form";
 
 @Injectable()
-export class SharedService {
-  isLoggedIn: boolean = false;
+export class YoutubeService {
+  constructor(private http: Http) {}
 
-  constructor(private http: Http) {
-    if (localStorage.getItem("user") && localStorage.getItem("accessToken")) {
-      this.isLoggedIn = true;
-    }
-  }
-
-  clearStorage() {
-    this.isLoggedIn = false;
-    localStorage.clear();
-  }
-
-  logout() {
+  getVideos(nextPageToken?: string, previousPageToken?: string) {
     let headers = new Headers({
       "Content-Type": "application/json"
     });
 
-    return this.http.get("http://localhost:9000/knolshare/logout", {headers: headers})
+    let url;
+
+    if(nextPageToken) {
+      url = `https://www.googleapis.com/youtube/v3/search?pageToken=${nextPageToken}&order=date&part=snippet&channelId=UCP4g5qGeUSY7OokXfim1QCQ&key=AIzaSyCmedFZ2QVVzQ1cElmU6kPM2PV5YEaQwhY`;
+    } else if(previousPageToken) {
+      url = `https://www.googleapis.com/youtube/v3/search?pageToken=${previousPageToken}&order=date&part=snippet&channelId=UCP4g5qGeUSY7OokXfim1QCQ&key=AIzaSyCmedFZ2QVVzQ1cElmU6kPM2PV5YEaQwhY`;
+    } else {
+      url = "https://www.googleapis.com/youtube/v3/search?order=date&part=snippet&channelId=UCP4g5qGeUSY7OokXfim1QCQ&key=AIzaSyCmedFZ2QVVzQ1cElmU6kPM2PV5YEaQwhY";
+    }
+    return this.http.get(url, {headers: headers})
       .map(res => this.extractData(res))
       .catch(this.handleError);
   }

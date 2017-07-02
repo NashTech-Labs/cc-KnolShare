@@ -26,8 +26,9 @@ export class LoginPage {
       localStorage.setItem("accessToken", JSON.stringify(data.data.accessToken));
       this.sharedService.isLoggedIn = true;
       this.alertController.create({title : "Successfully Logged in", message: ""});
-      this.navCtrl.push(HomePage);
+      this.navCtrl.pop();
     }, (err: any) => {
+      alert(err);
       console.log(err);
       this.alertController.create({title : "Invalid credentials", message: ""});
     });

@@ -12,8 +12,8 @@
     <h3>Signup</h3>
   </ion-item>
   <ion-item>
-    <ion-label color="primary" stacked>Enter First Name</ion-label>
-    <ion-input type="text" [(ngModel)]="signupFormObj.userName" required placeholder="First Name"></ion-input>
+    <ion-label color="primary" stacked>Enter User Name</ion-label>
+    <ion-input type="text" [(ngModel)]="signupFormObj.userName" required placeholder="User Name"></ion-input>
   </ion-item>
 
   <ion-item>
@@ -36,5 +36,5 @@
     <ion-input type="number" [(ngModel)]="signupFormObj.phoneNumber" required placeholder="Phone Number"></ion-input>
   </ion-item>
 
-  <button ion-button type="submit" round (click)="submit()">Signup</button>
+  <button ion-button style="float: right" type="submit" round (click)="submit()">Signup</button>
 </ion-content>
