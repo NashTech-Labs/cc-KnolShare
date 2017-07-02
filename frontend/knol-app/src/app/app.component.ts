@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, OnInit } from "@angular/core";
 import { Nav, Platform } from "ionic-angular";
 import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
@@ -6,18 +6,22 @@ import { SplashScreen } from "@ionic-native/splash-screen";
 import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
 import { SignupPage } from "../pages/signup/signup";
+import {SharedService} from "../services/shared.service";
 
 @Component({
   templateUrl: "app.html"
 })
-export class MyApp {
+export class MyApp implements OnInit{
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = HomePage;
-
+  isLoggedIn: boolean = false;
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(public platform: Platform,
+              public statusBar: StatusBar,
+              public sharedService: SharedService,
+              public splashScreen: SplashScreen) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -27,6 +31,19 @@ export class MyApp {
       { title: "Signup", component: SignupPage }
     ];
 
+  }
+
+  ngOnInit() {
+    this.isLoggedIn = this.sharedService.isLoggedIn;
+  }
+
+  logout() {
+    this.sharedService.logout().subscribe((data: any) => {
+      this.sharedService.clearStorage();
+      this.isLoggedIn = false;
+    }, (err: any) => {
+      console.error(err);
+    })
   }
 
   initializeApp() {

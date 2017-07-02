@@ -33,8 +33,4 @@ export class HomePage implements OnInit {
     this.navCtrl.push(this.pages[page]);
   }
 
-  logout() {
-    this.isLoggedIn = false;
-    this.sharedService.logout();
-  }
 }
