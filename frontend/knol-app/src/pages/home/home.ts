@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { NavController } from "ionic-angular";
 import {LoginPage} from "../login/login";
 import {SignupPage} from "../signup/signup";
+import {YoutubePage} from "../youtube/youtube";
 import {SharedService} from "../../services/shared.service";
 
 
@@ -14,8 +15,9 @@ export class HomePage implements OnInit {
   isLoggedIn: boolean;
   userName: string;
   pages = {
-    "Login": LoginPage ,
-    "Signup": SignupPage
+    "Login": LoginPage,
+    "Signup": SignupPage,
+    "Youtube": YoutubePage
   };
 
   constructor(public navCtrl: NavController, private sharedService: SharedService) {}

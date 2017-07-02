@@ -13,13 +13,15 @@ import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import {SignupPage} from "../pages/signup/signup";
 import {SharedService} from "../services/shared.service";
+import {YoutubePage} from "../pages/youtube/youtube";
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     SignupPage,
-    LoginPage
+    LoginPage,
+    YoutubePage
   ],
   imports: [
     BrowserModule,
@@ -27,13 +29,15 @@ import {SharedService} from "../services/shared.service";
     FormsModule,
     HttpModule,
     IonicModule.forRoot(MyApp),
+    FormsModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
     SignupPage,
-    LoginPage
+    LoginPage,
+    YoutubePage
   ],
   providers: [
     StatusBar,
