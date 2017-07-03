@@ -10,9 +10,8 @@ import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.{JsString, Json}
 import play.api.mvc.{Action, AnyContent, Controller, Request}
 import service.KnolxSessionService
-
+import com.knoldus.utils.JsonHelper._
 import scala.util.control.NonFatal
-
 
 class KnolxSessionController @Inject()(knolxSessionService: KnolxSessionService, jsonResponse: JsonResponse) extends
   Controller with SecuredAction with LoggerHelper {
@@ -21,12 +20,12 @@ class KnolxSessionController @Inject()(knolxSessionService: KnolxSessionService,
     val (presenter: String, topic: String, sessionId: Int, rating: Int, scheduledDate: Long) = extractJsonFromRequest(request)
     val topicProvided = topic match {
       case "" => None
-      case _ => Some(topicProvided)
+      case _ => Some(topic)
     }
     val (knolxSessionId, knolxRating) = getSessionData(sessionId, rating)
     knolxSessionService.createKnolxSession(KnolxSession(-1, presenter, topicProvided, knolxSessionId, knolxRating,
       new Date(scheduledDate))).map { knolxSession =>
-      Ok(jsonResponse.successResponse(Json.obj("message" -> JsString("Knolx session successfully registered"), "knolx" -> Json.toJson(knolxSession))))
+      Ok(jsonResponse.successResponse(Json.obj("message" -> JsString("Knolx session successfully registered"), "knolx" -> knolxSession.toJson)))
     } recover {
       case NonFatal(ex) => {
         getLogger(this.getClass).error(s"\n\n ${ex.getMessage}")

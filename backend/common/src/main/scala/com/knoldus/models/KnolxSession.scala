@@ -1,6 +1,8 @@
 package com.knoldus.models
 
 import java.sql.Date
+import com.knoldus.utils.JsonHelper.knolxSessionFormat
+import play.api.libs.json.Json
 
 
 case class KnolxSession(id: Int,
@@ -8,4 +10,6 @@ case class KnolxSession(id: Int,
                         topic: Option[String],
                         session_id: Option[Int],
                         rating: Option[Int],
-                        scheduledDate: Date)
+                        scheduledDate: Date){
+  lazy val toJson = Json.toJson(this)
+}
