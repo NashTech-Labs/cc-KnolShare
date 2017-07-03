@@ -21,6 +21,12 @@ trait KnolxSessionComponent extends KnolxSessionTable {
       .map(knolxId => knolx.copy(id = knolxId))
   }
 
+  def getAllKnolxSession(): Future[List[KnolxSession]] = {
+    db.run{
+      knolxSessionTableQuery.to[List].result
+    }
+  }
+
   def updateKnolxById(id: Int, knolx: KnolxSession): Future[Int] = {
     db.run {
       knolxSessionTableQuery.filter(_.id === id).update(knolx)

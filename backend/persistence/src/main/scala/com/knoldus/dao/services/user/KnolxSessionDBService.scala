@@ -15,6 +15,10 @@ trait KnolxSessionDBService {
     knolxSessionComponent.createKnolxSession(knolx)
   }
 
+  def getAllKnolxSessions(): Future[List[KnolxSession]] = {
+    knolxSessionComponent.getAllKnolxSession()
+  }
+
   def getKnolxByPresenter(presenter: String): Future[Option[KnolxSession]] = {
     knolxSessionComponent.getKnolxByPresentor(presenter)
   }
