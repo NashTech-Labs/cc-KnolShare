@@ -16,6 +16,11 @@ class KnolxSessionComponentSpec extends PlaySpecification with KnolxSessionCompo
       knolx.id must be equalTo 2
     }
 
+    "be able to get all knolx sessions" in {
+      val knolxSessions: List[KnolxSession] = await(getAllKnolxSession())
+      knolxSessions.size must beEqualTo(1)
+    }
+
     "be able to update knolx" in {
       val updateCount = await(updateKnolxById(1, KnolxSession(3, "shivangi", Some("xyz"), Some(TWO), Some(FOUR), java.sql.Date.valueOf("2017-09-12"))))
       updateCount must beEqualTo(1)
