@@ -1,3 +1,3 @@
 package com.knoldus.models
 
-case class ConsumeTweetMessage (message: String, groupId: String, kafkaTopic: String)
+case class ConsumeTweetMessage (message: String, kafkaTopic: String)

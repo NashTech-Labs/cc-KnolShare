@@ -3,7 +3,7 @@ package com.knoldus.streaming.kafka
 import java.util.Properties
 
 import akka.actor.Actor
-import com.google.inject.{ImplementedBy, Inject}
+import com.google.inject.Inject
 import com.knoldus.models.Message
 import com.knoldus.utils.Constants._
 import com.knoldus.utils.{LoggerHelper, TwitterConfigReader}
@@ -42,7 +42,10 @@ class StreamProcessorActor @Inject()(configReader: TwitterConfigReader) extends 
       case Failure(exception) => getLogger(this.getClass).debug(exception.getMessage)
         false
     }
+  }
 
+  override def postStop(): Unit = {
+    getLogger(this.getClass).info("Stream processor actor has been stopped.")
   }
 }
 

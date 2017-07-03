@@ -16,7 +16,8 @@ object Dependencies {
   val kafkaclients = "org.apache.kafka" % "kafka-clients" % "0.10.2.0"
   val twitter4j = "org.twitter4j" % "twitter4j-stream" % "4.0.6"
   val kafkastreams = "org.apache.kafka" % "kafka-streams" % "0.10.2.0"
-  val scalatest = "org.scalatest" %% "scalatest" % "2.2.4" % "test"
+  val scalatest = "org.scalatest" %% "scalatest" % "3.0.1" % "test"
+  val scalactic = "org.scalactic" %% "scalactic" % "3.0.1"
   val akkaTestKit    = "com.typesafe.akka"   %  "akka-testkit_2.11"        % "2.3.11"
 
   val playDependencies: Seq[ModuleID] = Seq(
@@ -59,7 +60,9 @@ object Dependencies {
     kafkaclients,
     twitter4j,
     kafkastreams,
-    akkaTestKit
+    akkaTestKit,
+    scalatest,
+    scalactic
   ) ++ scalaTestDependencies
 
   object PlayFramework {

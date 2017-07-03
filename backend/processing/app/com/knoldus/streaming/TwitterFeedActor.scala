@@ -1,4 +1,4 @@
-package com.knoldus.streaming.twitter
+package com.knoldus.streaming
 
 import akka.actor.Actor
 import com.google.inject.Inject
@@ -9,22 +9,21 @@ import com.knoldus.utils.{LoggerHelper, TwitterConfigReader}
 import twitter4j._
 import twitter4j.conf.ConfigurationBuilder
 
-class TwitterFeedActor @Inject()(configReader: TwitterConfigReader, tweetProducer: TweetProducer) extends Actor
-  with LoggerHelper {
+class TwitterFeedActor @Inject()(configReader: TwitterConfigReader, tweetProducer: TweetProducer)
+  extends Actor with LoggerHelper {
 
   override def receive: Receive = {
     case Message(PRODUCE_DATA) =>
-      sender() ! sendTweetsToKafka()
+      this.sendTweetsToKafka
   }
 
   private def sendTweetsToKafka(): Boolean = {
 
     val listener = new StatusListener() {
-
       def onStatus(status: Status): Unit = {
         val tweet = status.getText
         tweetProducer.send(tweet)
-        getLogger(this.getClass).info("Sent: " + tweet)
+        getLogger(this.getClass).info("SENT :" + tweet)
       }
 
       def onDeletionNotice(statusDeletionNotice: StatusDeletionNotice) = {}
@@ -39,7 +38,6 @@ class TwitterFeedActor @Inject()(configReader: TwitterConfigReader, tweetProduce
         ex.printStackTrace
       }
     }
-
     val twitterStream = getTwitterConfig
     twitterStream.addListener(listener)
     twitterStream.sample("en")

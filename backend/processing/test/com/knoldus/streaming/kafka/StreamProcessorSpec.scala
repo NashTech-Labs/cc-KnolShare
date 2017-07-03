@@ -1,8 +1,7 @@
-package com.knoldus
+package com.knoldus.streaming.kafka
 
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{TestActorRef, TestKit}
-import com.knoldus.streaming.kafka.{StreamProcessorActor, TweetProducer}
 import com.knoldus.utils.Constants.PROCESS_DATA
 import com.knoldus.utils.TwitterConfigReader
 import org.scalatest.WordSpecLike
@@ -16,9 +15,9 @@ class StreamProcessorSpec extends TestKit(ActorSystem()) with WordSpecLike with 
   val processingReq = Props(classOf[StreamProcessorActor], mockedConfigReader)
   val streamProcessorActor = TestActorRef[StreamProcessorActor](processingReq)
 
-  "com.knoldus.TwitterFeedActorSpec" should {
+  "com.knoldus.streaming.TwitterFeedActorSpec" should {
 
-    "com.knoldus.TwitterFeedActorSpec" in {
+    "com.knoldus.streaming.TwitterFeedActorSpec" in {
       mockedConfigReader.getKafkaServers() returns "localhost:9092"
       mockedConfigReader.getKafkaTopic() returns "my-tweet"
       streamProcessorActor ! PROCESS_DATA

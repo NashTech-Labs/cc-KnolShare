@@ -3,15 +3,12 @@ package api
 import java.util.Properties
 import javax.mail._
 import javax.mail.internet._
-
 import scala.util.{Failure, Success, Try}
-
-import com.knoldus.utils.LoggerHelper
+import com.knoldus.utils.KnolshareLogger
 import utils.NotificationConfigReader
 
-trait MailApi extends LoggerHelper {
+trait MailApi extends KnolshareLogger {
 
-  private val logger = getLogger(this.getClass)
   private val userEmail = NotificationConfigReader.email
   private val passWord = NotificationConfigReader.password
   private val port = "587"
@@ -29,9 +26,8 @@ trait MailApi extends LoggerHelper {
   def sendMail(recipients: List[String], subject: String, content: String): Boolean = {
     val message = new MimeMessage(session)
     Try(message.setFrom(new InternetAddress(userEmail))) match {
-      case Success(_) => logger.info(s"Sending The Email from Email id $userEmail")
-      case Failure(messagingException) => logger
-        .error(s"Exception occurs ${ messagingException.getMessage }")
+      case Success(_) => info(s"Sending The Email from Email id $userEmail")
+      case Failure(messagingException) => error(s"Exception occurs ${ messagingException.getMessage }")
 
     }
     val recipientAddress: Array[Address] = (recipients map
@@ -46,9 +42,9 @@ trait MailApi extends LoggerHelper {
       transport.connect(hostName, userEmail, passWord)
       transport.sendMessage(message, message.getAllRecipients)
     } match {
-      case Success(_) => logger.info("Email Sent!!")
+      case Success(_) => info("Email Sent!!")
         true
-      case Failure(messagingException) => logger.error(s"Messaging Exception $messagingException")
+      case Failure(messagingException) => error(s"Messaging Exception $messagingException")
         false
     }
   }

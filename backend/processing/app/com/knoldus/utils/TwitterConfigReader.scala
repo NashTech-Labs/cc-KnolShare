@@ -20,4 +20,6 @@ class TwitterConfigReader {
 
   def getKStreamTopic(): String = conf.getString("kstream.topic")
 
+  def getGroupId(): String = conf.getString("kafka.groupId")
+
 }

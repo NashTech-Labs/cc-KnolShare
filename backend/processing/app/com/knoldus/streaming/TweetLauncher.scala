@@ -3,29 +3,29 @@ package com.knoldus.streaming
 import akka.actor.{ActorSystem, Props}
 import com.google.inject.Inject
 import com.knoldus.models.{ConsumeTweetMessage, Message}
-import com.knoldus.streaming.kafka.{StreamProcessorActor, TweetConsumerActor, TweetProducer}
-import com.knoldus.streaming.twitter.TwitterFeedActor
+import com.knoldus.streaming.kafka._
 import com.knoldus.utils.Constants._
 import com.knoldus.utils.{LoggerHelper, TwitterConfigReader}
 import play.api.{Environment, Mode}
-import play.api.libs.concurrent.Execution.Implicits._
 
-class TweetLauncher @Inject()(environment: Environment, configReader: TwitterConfigReader, tweetProducer: TweetProducer) extends LoggerHelper {
+class TweetLauncher @Inject()(environment: Environment, configReader: TwitterConfigReader,
+                              tweetProducer: TweetProducer, kafkaConsumer: KSKafkaConsumer) extends LoggerHelper {
 
   val kafkaTopic: String = configReader.getKStreamTopic()
-  val kafkaGroupId: String = "my-group"
+  val kafkaGroupId: String = configReader.getGroupId()
   val processingGlobalActor = ActorSystem("ProcessingGlobalActor")
   val tweetProducerActor = processingGlobalActor.actorOf(Props(classOf[TwitterFeedActor], configReader, tweetProducer), "TweetProducer")
   val kafkaStreamProcessor = processingGlobalActor.actorOf(Props(classOf[StreamProcessorActor], configReader), "KafkaStreamProcessorActor")
-  val tweetConsumerActor = processingGlobalActor.actorOf(Props(classOf[TweetConsumerActor], configReader), "TweetConsumerActor")
+  val tweetConsumerActor = processingGlobalActor.actorOf(Props(classOf[TweetConsumerActor], kafkaConsumer), "TweetConsumerActor")
 
-  // $COVERAGE-OFF$
   if (environment.mode != Mode.Test) {
+    getLogger(this.getClass).info("\n\n ::::::::::::::::::::::::: Activating Tweet Producer :::::::::::::::::::::: \n\n")
     tweetProducerActor ! Message(PRODUCE_DATA)
+    getLogger(this.getClass).info("\n\n ::::::::::::::::::::::::: Activating Producer Actor :::::::::::::::::::::: \n\n")
     kafkaStreamProcessor ! Message(PROCESS_DATA)
-    tweetConsumerActor ! ConsumeTweetMessage(CONSUME_DATA, kafkaGroupId, kafkaTopic)
+    getLogger(this.getClass).info("\n\n ::::::::::::::::::::::::: Activating Stream Processor :::::::::::::::::::::: \n\n")
+    tweetConsumerActor ! ConsumeTweetMessage(CONSUME_DATA, kafkaTopic)
   }
-  // $COVERAGE-ON$
 
-  processingGlobalActor.terminate()
+  //processingGlobalActor.terminate()
 }

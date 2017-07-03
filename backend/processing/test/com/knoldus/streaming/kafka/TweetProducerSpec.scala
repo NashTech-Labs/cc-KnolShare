@@ -1,9 +1,8 @@
-package com.knoldus
+package com.knoldus.streaming.kafka
 
-import com.knoldus.streaming.kafka.TweetProducer
 import com.knoldus.utils.TwitterConfigReader
 import org.specs2.mock.Mockito
-import play.api.test.{PlaySpecification, WithApplication}
+import play.api.test.PlaySpecification
 
 class TweetProducerSpec extends PlaySpecification with Mockito{
 
