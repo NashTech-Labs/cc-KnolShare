@@ -13,6 +13,6 @@ trait MailService {
 
 }
 
-object MailServiceImpl extends MailService {
+class MailServiceImpl extends MailService {
   val mailApi: MailApi = MailApiImpl
 }

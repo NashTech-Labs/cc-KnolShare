@@ -1,7 +1,8 @@
 package controllers
 
-import scala.concurrent.Future
+import com.knoldus.exceptions.NotificationException.MailerDaemonException
 
+import scala.concurrent.Future
 import com.knoldus.exceptions.PSqlException.{InsertionError, UserNotFoundException}
 import com.knoldus.models.{User, UserResponse}
 import com.knoldus.utils.JsonResponse
@@ -16,10 +17,7 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
 
   private val mockedHelper = mock[Helper]
 
-  private val mockedJsonResponse = mock[JsonResponse]
-
   private val mockedUserService = mock[UserService]
-
   private val mockedPasswordUtility = mock[PassWordUtility]
 
   private val userRequestJson =
@@ -30,16 +28,13 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
     """{"userName":"anubhav","email":"anubhavtarar40@gmail.com",
       |"password":"xyzr","confirmPassword":"anubhav","phoneNumber":"8588915184"}""".stripMargin
 
-  private val invalidUserLoginJson =
-    """{"email":"wrongId@gmail.com",
+  private val invalidUserLoginJson = """{"email":"wrongId@gmail.com",
       |"password":"yz"}""".stripMargin
 
-  private val validUserLoginJson =
-    """{"email":"anubhavtarar40@gmail.com",
+  private val validUserLoginJson = """{"email":"anubhavtarar40@gmail.com",
       |"password":"anubhav"}""".stripMargin
 
-  private val invalidUserRequestJson =
-    """{"userName":"","email":"anubhavtarar40@gmail.com",
+  private val invalidUserRequestJson = """{"userName":"","email":"anubhavtarar40@gmail.com",
       |"password":"anubhav","confirmPassword":"anubhav","phoneNumber":"8588915184"}""".stripMargin
 
   private val emptyJsonForRegistration =
@@ -57,8 +52,6 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
 
   private val user = User(None, "anubhav", "anubhavtarar40@gmail.com", "anubhav", "8588915184")
 
-  private val userResponse = UserResponse("anubhav", "anubhavtarar40@gmail.com","8588915184")
-
   "new user must get created with valid user request json" in new WithApplication {
 
     val res: JsValue = Json.parse(
@@ -72,35 +65,38 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
     when(mockedUserService.validatePassWord("anubhav", "anubhav")).thenReturn(true)
 
 
-    when(mockedUserService
-      .sendMail(List("anubhavtarar40@gmail.com"), "Confirm your Registration", "Click below " +
-                                                                               "to confirm user " +
-                                                                               "registration:\nhttp://www.realaddressgoeshere.com/registerer/" +
-                                                                               "activateuser?token=sometokengoesher"))
-      .thenReturn(true)
+    when(mockedUserService.sendMail(List("anubhavtarar40@gmail.com"), "Confirm your Registration",
+      "Click below to confirm user registration:\nhttp://www.realaddressgoeshere.com/registerer/" +
+        "activateuser?token=sometokengoesher")).thenReturn(true)
 
-    val result = call(userController.registerUser,
-      FakeRequest(POST, "/knolshare/register")
-        .withJsonBody(json))
+    val result = call(userController.registerUser, FakeRequest(POST, "/knolshare/register").withJsonBody(json))
+    val responseJson =
+      """{
+        |"data":
+        |{
+        |"user":
+        |{
+        |"userName":"anubhav",
+        |"email":"anubhavtarar40@gmail.com",
+        |"phoneNumber":"8588915184"
+        |},
+        |"accessToken":"accessToken"
+        |}
+        |}""".stripMargin
 
     status(result) must equalTo(OK)
     contentType(result) must beSome("application/json")
-    contentAsString(result) mustEqual
-    """{"data":{"user":{"userName":"anubhav","email":"anubhavtarar40@gmail.com","phoneNumber":"8588915184"},"accessToken":"accessToken"}}"""
-      .stripMargin
-
+    contentAsString(result) mustEqual responseJson
   }
 
   "new user must not get created with invalid user request json" in new WithApplication {
 
-    val result = call(userController.registerUser,
-      FakeRequest(POST, "/knolshare/register")
+    val result = call(userController.registerUser, FakeRequest(POST, "/knolshare/register")
         .withJsonBody(Json.parse(invalidUserRequestJson)))
 
     status(result) must equalTo(BAD_REQUEST)
     contentType(result) must beSome("application/json")
-    contentAsString(result) mustEqual
-    """{"error":{"message":"wrong json content "}}"""
+    contentAsString(result) mustEqual """{"error":{"message":"wrong json content "}}"""
 
   }
 
@@ -117,10 +113,9 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
     """{"error":{"message":"wrong json content "}}"""
 
   }
-  "new user must not get created when password and confirm password is not same in user request " +
-  "json" in
-  new WithApplication {
 
+  "new user must not get created when password and confirm password is not same in user request json" in
+    new WithApplication {
 
     when(mockedUserService.validatePassWord("xyzr", "anubhav")).thenReturn(false)
 
@@ -132,10 +127,9 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
     contentType(result) must beSome("application/json")
     contentAsString(result) mustEqual
     """{"error":{"message":"password and confirm password do not match "}}"""
-
   }
-  "new user must not get created with invalid user request json" in new WithApplication {
 
+  "new user must not get created with invalid user request json" in new WithApplication {
     val result = call(userController.registerUser,
       FakeRequest(POST, "/knolshare/register")
         .withJsonBody(Json.parse(invalidUserRequestJson)))
@@ -146,27 +140,38 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
     """{"error":{"message":"wrong json content "}}"""
 
   }
+
   "new user must not get created if postgres connection failed" in new WithApplication {
     when(mockedPasswordUtility.hashedPassword("anubhav")).thenReturn("anubhav")
-
-    when(mockedUserService.createUser(user))
-      .thenReturn(Future.failed(InsertionError("unable to create the new user")))
-
+    when(mockedUserService.createUser(user)).thenReturn(Future.failed(
+      InsertionError("unable to create the new user")))
     when(mockedUserService.validatePassWord("anubhav", "anubhav")).thenReturn(true)
 
-
-    val result = call(userController.registerUser,
-      FakeRequest(POST, "/knolshare/register")
-        .withJsonBody(json))
+    val result = call(userController.registerUser, FakeRequest(POST, "/knolshare/register").withJsonBody(json))
 
     status(result) must equalTo(BAD_REQUEST)
     contentType(result) must beSome("application/json")
     contentAsString(result) mustEqual
     """{"error":{"message":"unable to create the new user"}}"""
-
   }
-  "user must not be able to login with invalid email id" in new WithApplication {
 
+  "new user must not get created for mailing failure" in new WithApplication {
+    when(mockedPasswordUtility.hashedPassword("anubhav")).thenReturn("anubhav")
+    when(mockedUserService.createUser(user)).thenReturn(Future.successful(user))
+    when(mockedUserService.sendMail(List("anubhavtarar40@gmail.com"), "Confirm your Registration",
+      "Congratulations !! \nYou have successfully completed your registration process"))
+      .thenReturn(throw new MailerDaemonException("Unable to send mail"))
+    when(mockedUserService.validatePassWord("anubhav", "anubhav")).thenReturn(true)
+
+    val result = call(userController.registerUser, FakeRequest(POST, "/knolshare/register").withJsonBody(json))
+
+    status(result) must equalTo(BAD_REQUEST)
+    contentType(result) must beSome("application/json")
+    contentAsString(result) mustEqual
+      """{"error":{"message":"Unable to send mail"}}"""
+  }
+
+  "user must not be able to login with invalid email id" in new WithApplication {
     when(mockedUserService.validateUser("wrongId@gmail.com"))
       .thenReturn(Future.failed(UserNotFoundException("User With This Email Does Not Exists")))
 
@@ -178,13 +183,12 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
     contentType(result) must beSome("application/json")
     contentAsString(result) mustEqual
     """{"error":{"message":"User With This Email Does Not Exists"}}"""
-
   }
-  "user must not be able to login with valid email id and invalid password" in new WithApplication {
 
-    when(mockedUserService.validateUser("anubhavtarar40@gmail.com"))
-      .thenReturn(Future.successful(user))
+  "user must not be able to login with valid email id and invalid password" in new WithApplication {
+    when(mockedUserService.validateUser("anubhavtarar40@gmail.com")).thenReturn(Future.successful(user))
     when(mockedPasswordUtility.verifyPassword("anubhav", "anubhav")).thenReturn(false)
+
     val result = call(userController.validateLogin,
       FakeRequest(POST, "/knolshare/login")
         .withJsonBody(Json.parse(validUserLoginJson)))
@@ -193,12 +197,12 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
     contentType(result) must beSome("application/json")
     contentAsString(result) mustEqual
     """{"error":{"message":"Invalid UserName or Password"}}"""
-
   }
-  "user must not be able to login with empty json" in new WithApplication {
 
+  "user must not be able to login with empty json" in new WithApplication {
     when(mockedUserService.validateUser(""))
       .thenReturn(Future.failed(UserNotFoundException("User With This Email Does Not Exists")))
+
     val result = call(userController.validateLogin,
       FakeRequest(POST, "/knolshare/login")
         .withJsonBody(Json.parse(emptyJsonForLogin)))
@@ -211,11 +215,10 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
   }
 
   "user must be able to login with valid email id and valid password" in new WithApplication {
-
-    when(mockedUserService.validateUser("anubhavtarar40@gmail.com"))
-      .thenReturn(Future.successful(user))
+    when(mockedUserService.validateUser("anubhavtarar40@gmail.com")).thenReturn(Future.successful(user))
     when(mockedPasswordUtility.verifyPassword("anubhav", "anubhav")).thenReturn(true)
     when(mockedHelper.generateAccessToken).thenReturn("accessToken")
+
     val result = call(userController.validateLogin,
       FakeRequest(POST, "/knolshare/login")
         .withJsonBody(Json.parse(validUserLoginJson)))
@@ -223,9 +226,7 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
     status(result) must equalTo(OK)
     contentType(result) must beSome("application/json")
     contentAsString(result) mustEqual
-    """{"data":{"user":{"userName":"anubhav","email":"anubhavtarar40@gmail.com","phoneNumber":"8588915184"},"accessToken":"accessToken"}}"""
-      .stripMargin
-
+    """{"data":{"user":{"userName":"anubhav","email":"anubhavtarar40@gmail.com","phoneNumber":"8588915184"},"accessToken":"accessToken"}}""".stripMargin
   }
 
   "user must be able to logout" in new WithApplication {
@@ -234,8 +235,7 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
     status(result) must equalTo(OK)
     contentType(result) must beSome("application/json")
     contentAsString(result) mustEqual
-    """{"data":{"message":"User Logged Out successfully !!"}}"""
-      .stripMargin
+    """{"data":{"message":"User Logged Out successfully !!"}}""".stripMargin
   }
 
   "unsuccessfull logout " in new WithApplication {
