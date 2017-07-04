@@ -2,7 +2,7 @@ package com.knoldus.utils
 
 import com.typesafe.config.ConfigFactory
 
-class TwitterConfigReader {
+class TwitterConfigReader() {
 
   val conf = ConfigFactory.load()
 

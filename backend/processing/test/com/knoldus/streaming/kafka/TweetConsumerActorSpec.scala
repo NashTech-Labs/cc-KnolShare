@@ -2,7 +2,6 @@ package com.knoldus.streaming.kafka
 
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{TestActorRef, TestKit}
-import com.knoldus.streaming.TwitterFeedActor
 import com.knoldus.utils.TwitterConfigReader
 import com.typesafe.config.ConfigFactory
 import org.scalatest.{AsyncWordSpecLike, BeforeAndAfterAll, MustMatchers}

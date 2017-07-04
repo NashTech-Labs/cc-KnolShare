@@ -3,6 +3,7 @@ package com.knoldus.utils
 //scalastyle:off
 
 object Constants {
+  val THOUSAND = 1000
   val HUNDRED = 100
   val TEN = 10
   val RATING = 5
