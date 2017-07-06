@@ -13,6 +13,8 @@ object Constants {
   val TWO = 2
   val THREE =   3
   val FOUR = 4
+  val MAIL_SUBJECT = "Confirm your Registration"
+  val MAIL_BODY = "Congratulations !! \nYou have successfully completed your registration process"
 
 }
 

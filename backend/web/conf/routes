@@ -16,6 +16,6 @@ POST        /knolshare/admin/login        controllers.AdminController.validateLo
 
 GET         /knolshare/logout             controllers.UserController.logout
 
-#GET         /knolshare/knolxSession/getAll  controllers.KnolxSessionController.getAllKnolxSession
+GET        /knolshare/knolxsession/getAll  controllers.KnolxSessionController.getAllKnolxSession
 
-#POST        /knolshare/knolxSession/create  controllers.KnolxSessionController.createKnolxSession
+POST       /knolshare/knolxsession/create  controllers.KnolxSessionController.createKnolxSession

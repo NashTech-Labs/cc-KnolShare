@@ -13,13 +13,13 @@ trait KnolxSessionTable {
 
   import driver.api._
 
-  private[components] class KnolxSessionTable(tag: Tag) extends Table[KnolxSession](tag, "KnolxSession") {
+  private[components] class KnolxSessionTable(tag: Tag) extends Table[KnolxSession](tag, "knolxsession") {
     val id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     val presentor = column[String]("presentor")
     val topic = column[Option[String]]("topic")
     val sessionId: Column[Option[Int]] = column[Option[Int]]("session_id")
     val rating = column[Option[Int]]("rating")
-    val date = column[Date]("scheduledDate")
+    val date = column[Date]("scheduled_date")
 
     def * : ProvenShape[KnolxSession] = (id, presentor, topic, sessionId, rating, date) <> ((KnolxSession.apply _).tupled, KnolxSession.unapply)
   }

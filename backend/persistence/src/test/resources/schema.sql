@@ -22,7 +22,7 @@ CREATE TABLE knolxSession(
     topic varchar(100),
     session_id INT,
     rating INT,
-    scheduledDate DATE NOT NULL
+    scheduled_date DATE NOT NULL
 );
 
 INSERT INTO knolxSession values(1,'Geetika','xyz',1,4,'2017-12-21');

@@ -5,7 +5,7 @@ import javax.inject.Inject
 import com.knoldus.exceptions.NotificationException.MailerDaemonException
 import com.knoldus.exceptions.PSqlException.{InsertionError, UserNotFoundException}
 import com.knoldus.models.{User, UserResponse}
-import com.knoldus.utils.JsonResponse
+import com.knoldus.utils.{Constants, JsonResponse, LoggerHelper}
 import controllers.security.SecuredAction
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.{JsString, Json}
@@ -18,14 +18,13 @@ import scala.concurrent.Future
 
 class UserController @Inject()(userService: UserService, passWordUtility: PassWordUtility,
                                accessTokenHelper: Helper, jsonResponse: JsonResponse)
-  extends Controller with SecuredAction {
+  extends Controller with SecuredAction with LoggerHelper {
 
   def registerUser: Action[AnyContent] = {
     Action.async {
       implicit request =>
         val (userEmail: String, phoneNumber: String, password: String, confirmPassword: String,
-        userName: String, listFields: List[String]) = extractJsonFromRequest(
-          request)
+        userName: String, listFields: List[String]) = extractJsonFromRequest(request)
         createUserJson(userEmail, phoneNumber, password, confirmPassword, userName, listFields)
     }
   }
@@ -57,16 +56,16 @@ class UserController @Inject()(userService: UserService, passWordUtility: PassWo
     val user = createUserFromJson(userEmail.toLowerCase, phoneNumber, password, userName)
     val userResponse = UserResponse(user.userName, user.email, user.phoneNumber)
     userService.createUser(user).flatMap { _ =>
-      userService.sendMail(List(userEmail), "Confirm your Registration",
-        "Congratulations !! \nYou have successfully completed your registration process")
       val accessToken = accessTokenHelper.generateAccessToken
+      userService.sendMail(List(userEmail), Constants.MAIL_SUBJECT, Constants.MAIL_BODY).recover {
+        case mailerDaemonError: MailerDaemonException =>
+          getLogger(this.getClass).info("Unable to send Confirmation Mail : " + mailerDaemonError.getMessage)
+      }
       Future.successful(Ok(jsonResponse.successResponse(Json.obj("user" -> userResponse.toJson,
         "accessToken" -> JsString(accessToken)))).withSession("accessToken" -> accessToken))
     }.recover {
       case insertionError: InsertionError => BadRequest(jsonResponse
         .failureResponse(insertionError.message))
-      case mailerDaemonError: MailerDaemonException => BadRequest(jsonResponse
-        .failureResponse(mailerDaemonError.message))
     }
   }
 
@@ -95,40 +94,37 @@ class UserController @Inject()(userService: UserService, passWordUtility: PassWo
 
   def validateLogin: Action[AnyContent] = {
     Action.async { implicit request =>
-        val bodyJs = request.body.asJson.getOrElse(Json.parse(""))
-        val userEmail = (bodyJs \ "email").asOpt[String].fold("")(identity)
-        val password = (bodyJs \ "password").asOpt[String].fold("")(identity)
-        userService.validateUser(userEmail).flatMap {
-          user => {
-            if (passWordUtility.verifyPassword(password, user.password)) {
-              val accessToken = accessTokenHelper.generateAccessToken
-              Future.successful(Ok(
-                jsonResponse
-                  .successResponse(Json
-                    .obj("user" -> UserResponse(user.userName, user.email, user.phoneNumber).toJson,
-                      "accessToken" -> JsString(accessToken))))
-                .withSession("accessToken" -> accessToken))
-            }
-            else {
-              Future(NotFound(jsonResponse.failureResponse("Invalid UserName or Password")))
-            }
+      val bodyJs = request.body.asJson.getOrElse(Json.parse(""))
+      val userEmail = (bodyJs \ "email").asOpt[String].fold("")(identity)
+      val password = (bodyJs \ "password").asOpt[String].fold("")(identity)
+      userService.validateUser(userEmail).flatMap {
+        user => {
+          if (passWordUtility.verifyPassword(password, user.password)) {
+            val accessToken = accessTokenHelper.generateAccessToken
+            Future.successful(Ok(
+              jsonResponse
+                .successResponse(Json
+                  .obj("user" -> UserResponse(user.userName, user.email, user.phoneNumber).toJson,
+                    "accessToken" -> JsString(accessToken))))
+              .withSession("accessToken" -> accessToken))
           }
-        }.recover {
-          case userNotFoundException: UserNotFoundException => BadRequest(jsonResponse
-            .failureResponse(
-              userNotFoundException.message))
+          else {
+            Future(NotFound(jsonResponse.failureResponse("Invalid UserName or Password")))
+          }
         }
+      }.recover {
+        case userNotFoundException: UserNotFoundException => BadRequest(jsonResponse
+          .failureResponse(
+            userNotFoundException.message))
+      }
 
     }
   }
 
   def logout: Action[AnyContent] = {
     UserAction.async { implicit request =>
-        Future.successful(Ok(jsonResponse
-            .successResponse(Json.obj("message" -> JsString("User Logged Out successfully !!")))).withNewSession)
+      Future.successful(Ok(jsonResponse
+        .successResponse(Json.obj("message" -> JsString("User Logged Out successfully !!")))).withNewSession)
     }
   }
 }
-
-
-

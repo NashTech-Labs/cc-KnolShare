@@ -27,9 +27,9 @@ class UserService @Inject()(userDBService: UserDBService, mailService: MailServi
     }
   }
 
-  def sendMail(listRecipents: List[String], subject: String, content: String): Boolean = {
+  def sendMail(listRecipents: List[String], subject: String, content: String): Future[Boolean] = {
     if (mailService.sendMail(listRecipents, subject, content)){
-      true
+      Future(true)
     } else throw MailerDaemonException("Failed to send the mail")
   }
 

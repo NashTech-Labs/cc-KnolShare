@@ -40,7 +40,7 @@ class UserServiceSpec extends PlaySpecification with Mockito {
 
     "send Mail : Success Case" in {
       mockedMailService.sendMail(List("email@abc.com"), "subject", "content") returns true
-      TestObject.sendMail(List("email@abc.com"), "subject", "content") must beEqualTo(true)
+      await(TestObject.sendMail(List("email@abc.com"), "subject", "content")) must beEqualTo(true)
     }
 
     "send Mail : Failure Case" in {

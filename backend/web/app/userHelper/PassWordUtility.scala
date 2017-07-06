@@ -2,6 +2,7 @@ package userHelper
 
 import org.mindrot.jbcrypt.BCrypt
 
+// $COVERAGE-OFF$
 
 class PassWordUtility {
 
@@ -12,5 +13,7 @@ class PassWordUtility {
   def verifyPassword(plainPassword: String, hashedPassword: String): Boolean = {
     BCrypt.checkpw(plainPassword, hashedPassword)
   }
-
 }
+
+// $COVERAGE-ON$
+

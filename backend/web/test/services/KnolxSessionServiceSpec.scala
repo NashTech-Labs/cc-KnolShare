@@ -1,10 +1,12 @@
 package services
 
 import com.knoldus.dao.services.user.KnolxSessionDBService
+import com.knoldus.exceptions.PSqlException.{DatabaseException, InsertionError}
 import com.knoldus.models.KnolxSession
 import org.specs2.mock.Mockito
 import play.api.test.PlaySpecification
 import service.KnolxSessionService
+
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -16,11 +18,18 @@ class KnolxSessionServiceSpec extends PlaySpecification with Mockito {
 
   sequential
   "KnolxSessionServiceSpec" should {
+
     "be able to createKnolxSession" in {
       val knolSession: KnolxSession = KnolxSession(1,"Shivangi",Some("abc"),Some(2),None,java.sql.Date.valueOf("2017-09-12"))
       mockedKnolxSessionDBService.createKnolxSession(knolSession) returns Future.successful(knolSession)
       val result: KnolxSession = await(TestObject.createKnolxSession(knolSession))
       result.id must beEqualTo(1)
+    }
+
+    "be able to createKnolxSession : Failure Case" in {
+      val knolSession: KnolxSession = KnolxSession(1,"Shivangi",Some("abc"),Some(2),None,java.sql.Date.valueOf("2017-09-12"))
+      mockedKnolxSessionDBService.createKnolxSession(knolSession) returns Future.failed(InsertionError("Unable to insert"))
+      await(TestObject.createKnolxSession(knolSession)) must throwA[InsertionError]
     }
 
     "be able to get all knolx sessions" in {
@@ -29,5 +38,12 @@ class KnolxSessionServiceSpec extends PlaySpecification with Mockito {
       val result: List[KnolxSession] = await(TestObject.getAllKnolxSession())
       result.size must beEqualTo(1)
     }
+
+    "be able to get all knolx sessions: Failure Case" in {
+      val knolSession: KnolxSession = KnolxSession(1,"Shivangi",Some("abc"),Some(2),None,java.sql.Date.valueOf("2017-09-12"))
+      mockedKnolxSessionDBService.getAllKnolxSessions() returns Future.failed(DatabaseException("Unable to talk to DB"))
+      await(TestObject.getAllKnolxSession()) must throwA[DatabaseException]
+    }
+
   }
 }
