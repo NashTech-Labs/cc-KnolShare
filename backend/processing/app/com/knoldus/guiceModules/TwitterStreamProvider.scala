@@ -1,4 +1,4 @@
-package com.knoldus.GuiceModules
+package com.knoldus.guiceModules
 
 import javax.inject.Inject
 

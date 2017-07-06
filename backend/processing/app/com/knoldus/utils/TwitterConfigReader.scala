@@ -2,6 +2,7 @@ package com.knoldus.utils
 
 import com.typesafe.config.ConfigFactory
 
+import collection.JavaConverters._
 class TwitterConfigReader() {
 
   val conf = ConfigFactory.load()
@@ -21,5 +22,7 @@ class TwitterConfigReader() {
   def getKStreamTopic(): String = conf.getString("kstream.topic")
 
   def getGroupId(): String = conf.getString("kafka.groupId")
+
+  def getTechnologyNames() : List[String] = conf.getStringList("technologyNames").asScala.toList
 
 }

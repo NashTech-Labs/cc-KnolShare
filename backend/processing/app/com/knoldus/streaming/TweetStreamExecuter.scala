@@ -2,13 +2,14 @@ package com.knoldus.streaming
 
 import java.util.Properties
 
+import com.google.inject.Inject
 import com.knoldus.utils.LoggerHelper
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.{KafkaStreams, StreamsConfig}
 import org.apache.kafka.streams.processor.TopologyBuilder
 import org.apache.kafka.streams.state.Stores
 
-class TweetStreamExecuter extends LoggerHelper {
+class TweetStreamExecuter @Inject()(tweetStreamProcessorSupplier: TweetStreamProcessorSupplier)extends LoggerHelper {
 
   def execute(): Unit = {
     getLogger(this.getClass).info("The tweet execution has been  started")
@@ -21,9 +22,9 @@ class TweetStreamExecuter extends LoggerHelper {
 
     val builder = new TopologyBuilder
     builder.addSource("Source", "topic1")
-    builder.addProcessor("Process", new TweetStreamProcessorSupplier, "Source")
+    builder.addProcessor("Process", tweetStreamProcessorSupplier, "Source")
     builder.addStateStore(Stores.create("stateStore").withStringKeys().withStringValues()
-      .persistent().build(), "Process")
+      .inMemory().build(), "Process")
     builder.addSink("Sink", "topic2", "Process")
 
     val streams: KafkaStreams = new KafkaStreams(builder, props)

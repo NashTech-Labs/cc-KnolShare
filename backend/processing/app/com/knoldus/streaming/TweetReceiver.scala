@@ -6,10 +6,9 @@ import com.google.inject.name.Named
 import com.knoldus.utils.LoggerHelper
 import org.apache.kafka.clients.producer.ProducerRecord
 import twitter4j.{StallWarning, Status, StatusDeletionNotice, StatusListener, _}
-import com.knoldus.utils.TechnologyName._
 
 class TweetReceiver @Inject()(@Named("twitterStream") twitterStream: TwitterStream,
-                              kSTweetProducer: KSTweetProducer, filterQuery: FilterQuery )
+                              kSTweetProducer: KSTweetProducer, filterQuery: FilterQuery)
   extends StatusListener with LoggerHelper {
 
   override def onDeletionNotice(statusDeletionNotice: StatusDeletionNotice): Unit = {
