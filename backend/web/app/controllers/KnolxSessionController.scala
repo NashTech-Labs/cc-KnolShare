@@ -28,7 +28,9 @@ class KnolxSessionController @Inject()(knolxSessionService: KnolxSessionService,
     val (knolxSessionId, knolxRating) = getSessionData(sessionId, rating)
     val knolxSession = KnolxSession(-1, presenter, topicProvided, knolxSessionId, knolxRating,
       scheduledDate)
+    println("Received Knolx session" + knolxSession)
     knolxSessionService.createKnolxSession(knolxSession).map { knolxSession =>
+      println("Invoked service")
       Ok(jsonResponse.successResponse(Json.obj("message" -> JsString("Knolx session successfully registered"), "knolx" -> knolxSession.toJson)))
     } recover {
       case NonFatal(ex) => {
@@ -43,8 +45,8 @@ class KnolxSessionController @Inject()(knolxSessionService: KnolxSessionService,
     val bodyJs = request.body.asJson.getOrElse(Json.parse(""))
     val presenter = (bodyJs \ "presenter").asOpt[String].fold("")(identity)
     val topic = (bodyJs \ "topic").asOpt[String].fold("")(identity)
-    val sessionId = (bodyJs \ "sessionId").asOpt[Int].fold(-1)(identity)
-    val rating = (bodyJs \ "rating").asOpt[Int].fold(-1)(identity)
+    val sessionId = (bodyJs \ "sessionId").asOpt[String].fold(-1)(id => id.toInt)
+    val rating = (bodyJs \ "rating").asOpt[String].fold(-1)(rating => rating.toInt)
     val scheduledDate = (bodyJs \ "scheduledDate").asOpt[Date].fold(new Date(0,0,0))(identity)
     (presenter, topic, sessionId, rating, scheduledDate)
   }

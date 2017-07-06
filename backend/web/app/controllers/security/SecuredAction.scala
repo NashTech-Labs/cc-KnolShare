@@ -20,8 +20,7 @@ trait SecuredAction {
         block: (SecuredRequest[A]) => Future[Result]): Future[Result] = {
       implicit val req = request
       val accessToken = req.headers.get("accessToken").fold("")(identity)
-      if (req.session.get("accessToken").fold("")(identity).equals(accessToken) &&
-          !accessToken.isEmpty) {
+      if (req.session.get("accessToken").fold("")(identity).equals(accessToken) && !accessToken.isEmpty) {
         block(SecuredRequest(accessToken, request))
       } else {
         Future.successful(BadRequest(Json.obj("error" -> Json.obj("message" -> "Unauthorised Access")))

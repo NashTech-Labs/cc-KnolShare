@@ -6,21 +6,16 @@ import com.knoldus.models.{KnolxSession, UserResponse}
 import play.api.libs.json.Json.{fromJson, toJson}
 import play.api.libs.json._
 
-object JsonHelper extends LoggerHelper{
+object JsonHelper extends LoggerHelper {
 
   def dateToJsvalue(date: Date): JsString = {
     JsString(date.toString)
   }
 
-  //TODO: need to refactor the logic here  : not in use currently
-  def jsValueToDate(dt: Date): Date = {
-    new Date(Constants.HUNDRED)
-  }
-
   implicit val dateFormat = new Format[Date] {
     override def reads(json: JsValue): JsResult[Date] = {
         getLogger(this.getClass).info("Mapping Json for Date to Case Class : Reads")
-        fromJson[Date](json).map(jsValueToDate)
+        fromJson[Date](json)
       }
     override def writes(date: Date): JsValue = {
       getLogger(this.getClass).info("Mapping Json for Date to Case Class : Write")
