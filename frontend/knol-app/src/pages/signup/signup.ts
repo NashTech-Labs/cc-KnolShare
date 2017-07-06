@@ -21,12 +21,13 @@ export class SignupPage {
 
   submit() {
     this.signupService.signup(this.signupFormObj).subscribe( (data: any) => {
-      console.log(data);
-      localStorage.setItem("user", JSON.stringify(data.data));
+      localStorage.setItem("user", JSON.stringify(data.data.user));
+      localStorage.setItem("accessToken", JSON.stringify(data.data.accessToken));
       this.sharedService.isLoggedIn = true;
-      this.navCtrl.push(HomePage);
+      this.navCtrl.pop();
       this.alertController.create({title : "Successfully Logged in", message: "signup hogya"});
     }, (err: any) => {
+      alert(err);
       console.log(err);
       this.alertController.create({title : "Successfully Logged in", message: "signup hogya"});
     });

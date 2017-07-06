@@ -50,5 +50,7 @@ class TweetReceiver @Inject()(@Named("twitterStream") twitterStream: TwitterStre
 
     filterQuery.track("akka", "elasticsearch", "elastic search", "akkahttp", "neo4j", "postgres",
       "mysql", "playframework", "play framework", "kafka", "flink", "orango_db", "redis")
+
+    twitterStream.filter(filterQuery)
   }
 }

@@ -22,11 +22,13 @@ export class LoginPage {
   submit() {
     this.loginService.login(this.loginFormObj).subscribe( (data: any) => {
       console.log(data);
-      localStorage.setItem("user", JSON.stringify(data.data));
+      localStorage.setItem("user", JSON.stringify(data.data.user));
+      localStorage.setItem("accessToken", JSON.stringify(data.data.accessToken));
       this.sharedService.isLoggedIn = true;
       this.alertController.create({title : "Successfully Logged in", message: ""});
-      this.navCtrl.push(HomePage);
+      this.navCtrl.pop();
     }, (err: any) => {
+      alert(err);
       console.log(err);
       this.alertController.create({title : "Invalid credentials", message: ""});
     });

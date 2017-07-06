@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { NavController } from "ionic-angular";
 import {LoginPage} from "../login/login";
 import {SignupPage} from "../signup/signup";
+import {YoutubePage} from "../youtube/youtube";
 import {SharedService} from "../../services/shared.service";
 
 
@@ -11,18 +12,17 @@ import {SharedService} from "../../services/shared.service";
 })
 export class HomePage implements OnInit {
 
-  isLoggedIn: boolean;
   userName: string;
   pages = {
-    "Login": LoginPage ,
-    "Signup": SignupPage
+    "Login": LoginPage,
+    "Signup": SignupPage,
+    "Youtube": YoutubePage
   };
 
   constructor(public navCtrl: NavController, private sharedService: SharedService) {}
 
   ngOnInit() {
-    this.isLoggedIn = this.sharedService.isLoggedIn;
-    if (this.isLoggedIn) {
+    if (this.sharedService.isLoggedIn) {
       this.userName = JSON.parse(localStorage.getItem("user")).userName;
     }
   }
@@ -31,8 +31,4 @@ export class HomePage implements OnInit {
     this.navCtrl.push(this.pages[page]);
   }
 
-  logout() {
-    this.isLoggedIn = false;
-    this.sharedService.logout();
-  }
 }

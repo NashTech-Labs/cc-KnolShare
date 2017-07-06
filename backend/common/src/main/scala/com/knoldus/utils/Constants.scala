@@ -13,9 +13,7 @@ object Constants {
   val TWO = 2
   val THREE =   3
   val FOUR = 4
-  val CONSUME_DATA = "ConsumeData"
-  val PROCESS_DATA = "ProcessData"
-  val PRODUCE_DATA = "ProduceData"
+
 }
 
 //scalastyle:on
