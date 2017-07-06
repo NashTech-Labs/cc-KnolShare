@@ -54,7 +54,9 @@ object Dependencies {
     PlayFramework.cache,
     PlayFramework.ws,
     PlayFramework.json,
-    PlayFramework.specs2
+    PlayFramework.specs2,
+    ScalaTest.mockitoTest,
+    ScalaTest.scalaTest
   )
   val slackDependencies = Seq(
     SlackRunner.slackClient
