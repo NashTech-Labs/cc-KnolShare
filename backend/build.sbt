@@ -52,3 +52,9 @@ lazy val notification = (
     settings(scoverageSettings: _*)
   ) dependsOn persistence
 
+lazy val processing = (
+  playProject("processing")
+    settings(libraryDependencies ++= processingDependencies)
+    settings(routesGenerator := InjectedRoutesGenerator)
+    settings(scoverageSettings: _*)
+  ) dependsOn (common)
