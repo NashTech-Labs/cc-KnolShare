@@ -30,13 +30,11 @@ trait MailApi extends LoggerHelper {
     val message = new MimeMessage(session)
     Try(message.setFrom(new InternetAddress(userEmail))) match {
       case Success(_) => logger.info(s"Sending The Email from Email id $userEmail")
-      case Failure(messagingException) => logger
-        .error(s"Exception occurs ${ messagingException.getMessage }")
-
+      case Failure(messagingException) => logger.error(s"Exception occurs ${ messagingException.getMessage }")
     }
+
     val recipientAddress: Array[Address] = (recipients map
                                             { recipient => new InternetAddress(recipient) }).toArray
-
     val transport = session.getTransport("smtp")
     Try {
       message.addRecipients(Message.RecipientType.TO, recipientAddress)

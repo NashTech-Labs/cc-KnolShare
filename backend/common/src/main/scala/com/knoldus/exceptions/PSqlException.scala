@@ -7,6 +7,6 @@ object PSqlException {
 
   case class UserNotFoundException(message: String) extends Exception
 
-
+  case class DatabaseException(message: String) extends Exception
 
 }

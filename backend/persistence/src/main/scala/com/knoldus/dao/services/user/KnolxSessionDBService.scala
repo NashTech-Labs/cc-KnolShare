@@ -2,17 +2,23 @@ package com.knoldus.dao.services.user
 
 import java.sql.Date
 
+import com.google.inject.ImplementedBy
 import com.knoldus.dao.components.KnolxSessionComponent
 import com.knoldus.models.KnolxSession
 
 import scala.concurrent.Future
 
+@ImplementedBy(classOf[KnolxSessionDBImpl])
 trait KnolxSessionDBService {
 
   val knolxSessionComponent: KnolxSessionComponent
 
   def createKnolxSession(knolx: KnolxSession): Future[KnolxSession] = {
     knolxSessionComponent.createKnolxSession(knolx)
+  }
+
+  def getAllKnolxSessions(): Future[List[KnolxSession]] = {
+    knolxSessionComponent.getAllKnolxSession()
   }
 
   def getKnolxByPresenter(presenter: String): Future[Option[KnolxSession]] = {

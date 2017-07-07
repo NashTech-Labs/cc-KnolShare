@@ -27,7 +27,7 @@ class AdminServiceSpec extends PlaySpecification with Mockito {
     "invalidate admin for invalid email and password" in {
       val admin = Admin(1, "admin@gmail.com", "password")
       mockedAdminDBService.getAdminByEmail("admin@gmail.com") returns Future.successful(None)
-      await(TestObject.validateUser("admin@gmail.com")) must throwA[Exception]
+      await(TestObject.validateUser("admin@gmail.com")) must throwA[UserNotFoundException]
     }
 
   }

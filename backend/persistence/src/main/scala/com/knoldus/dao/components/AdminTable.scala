@@ -10,7 +10,7 @@ trait AdminTable {
 
   import driver.api._
 
-  private[components] class AdminTable(tag: Tag) extends Table[Admin](tag, "Admin") {
+  private[components] class AdminTable(tag: Tag) extends Table[Admin](tag, "admin") {
     val id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     val email = column[String]("email")
     val password = column[String]("password")

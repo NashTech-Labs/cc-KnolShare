@@ -11,8 +11,7 @@ trait Helper {
   def generateAccessToken: String = Random.alphanumeric.take(Constants.TEN).mkString("")
 
   def validatePassWord(password: String, confirmPassword: String): Boolean = {
-    password
-      .equals(confirmPassword)
+    password.equals(confirmPassword)
   }
 }
 
