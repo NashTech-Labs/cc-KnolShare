@@ -53,8 +53,6 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
 
   private val user = User(None, "anubhav", "anubhavtarar40@gmail.com", "anubhav", "8588915184")
 
-
-
   "new user must get created with valid user request json" in new WithApplication {
     val res: JsValue = Json.parse(
       """{"data":{"userName":"anubhav","email":"anubhavtarar40@gmail.com",
@@ -67,28 +65,14 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
     when(mockedUserService.validatePassWord("anubhav", "anubhav")).thenReturn(true)
 
 
-    when(mockedUserService.sendMail(List("anubhavtarar40@gmail.com"), "Confirm your Registration",
-      "Click below to confirm user registration:\nhttp://www.realaddressgoeshere.com/registerer/" +
-        "activateuser?token=sometokengoesher")).thenReturn(Future(true))
+    when(mockedUserService.sendMail(List("anubhavtarar40@gmail.com"), Constants.MAIL_SUBJECT,
+      Constants.MAIL_BODY)).thenReturn(Future(true))
 
     val result = call(userController.registerUser, FakeRequest(POST, "/knolshare/register").withJsonBody(json))
-    val responseJson =
-      """{
-        |"data":
-        |{
-        |"user":
-        |{
-        |"userName":"anubhav",
-        |"email":"anubhavtarar40@gmail.com",
-        |"phoneNumber":"8588915184"
-        |},
-        |"accessToken":"accessToken"
-        |}
-        |}""".stripMargin
 
     status(result) must equalTo(OK)
     contentType(result) must beSome("application/json")
-    contentAsString(result) mustEqual responseJson
+    contentAsString(result) must contain("\"email\":\"anubhavtarar40@gmail.com\"")
   }
 
   "new user must not get created with invalid user request json" in new WithApplication {
@@ -197,7 +181,7 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
     status(result) must equalTo(BAD_REQUEST)
     contentType(result) must beSome("application/json")
     contentAsString(result) mustEqual
-      """{ror":{"message":"User With This Email Does Not Exists"}}"""
+      """{"error":{"message":"User With This Email Does Not Exists"}}"""
   }
 
   "user must not be able to login with valid email id and invalid password" in new WithApplication {
@@ -256,8 +240,8 @@ class UserControllerSpec extends PlaySpecification with MockitoSugar {
   "unsuccessfull logout " in new WithApplication {
     val result = call(userController.logout, FakeRequest(GET, "/knolshare/logout")
       .withSession("accessToken" -> "accessToken"))
-    status(result) must equalTo(UNAUTHORIZED)
-    contentType(result) must beSome("text/plain")
-    contentAsString(result) mustEqual "Unauthorized Access !!"
+    status(result) must equalTo(BAD_REQUEST)
+    contentType(result) must beSome("application/json")
+    contentAsString(result) mustEqual """{"error":{"message":"Unauthorised Access"}}"""
   }
 }

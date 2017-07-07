@@ -14,28 +14,23 @@ import com.knoldus.utils.JsonHelper._
 
 import scala.util.control.NonFatal
 
-class KnolxSessionController @Inject()(knolxSessionService: KnolxSessionService, jsonResponse: JsonResponse) extends
-  Controller with SecuredAction with LoggerHelper {
+class KnolxSessionController @Inject()(knolxSessionService: KnolxSessionService) extends
+  Controller with SecuredAction with LoggerHelper with JsonResponse {
 
   def createKnolxSession: Action[AnyContent] = UserAction.async { implicit request =>
     val (presenter: String, topic: String, sessionId: Int, rating: Int, scheduledDate: Date) =
       extractJsonFromRequest
-    val topicProvided = topic match {
-      case "" => None
-      case _ => Some(topic)
-    }
 
+    val topicProvided: Option[String] = if (topic.isEmpty) None else { Some(topic) }
     val (knolxSessionId, knolxRating) = getSessionData(sessionId, rating)
     val knolxSession = KnolxSession(-1, presenter, topicProvided, knolxSessionId, knolxRating,
       scheduledDate)
-    println("Received Knolx session" + knolxSession)
     knolxSessionService.createKnolxSession(knolxSession).map { knolxSession =>
-      println("Invoked service")
-      Ok(jsonResponse.successResponse(Json.obj("message" -> JsString("Knolx session successfully registered"), "knolx" -> knolxSession.toJson)))
+      Ok(successResponse(Json.obj("message" -> JsString("Knolx session successfully registered"), "knolx" -> knolxSession.toJson)))
     } recover {
       case NonFatal(ex) => {
         getLogger(this.getClass).error(s"\n\n ${ex.getMessage}")
-        BadRequest(jsonResponse.failureResponse("Internal Server Error"))
+        BadRequest(failureResponse("Internal Server Error"))
       }
     }
   }
@@ -65,11 +60,11 @@ class KnolxSessionController @Inject()(knolxSessionService: KnolxSessionService,
 
   def getAllKnolxSession: Action[AnyContent] = UserAction.async { implicit request =>
     (knolxSessionService.getAllKnolxSession() map { sessionList =>
-      Ok(jsonResponse.successResponse(Json.obj("sessionList" -> Json.toJson(sessionList))))
+      Ok(successResponse(Json.obj("sessionList" -> Json.toJson(sessionList))))
     }) recover {
       case NonFatal(ex) => {
         getLogger(this.getClass).error(s"\n\n ${ex.getMessage}")
-        BadRequest(jsonResponse.failureResponse("Internal Server Error"))      }
+        BadRequest(failureResponse("Internal Server Error"))      }
     }
   }
 

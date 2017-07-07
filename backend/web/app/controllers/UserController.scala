@@ -59,13 +59,13 @@ class UserController @Inject()(userService: UserService, passWordUtility: PassWo
       val accessToken = accessTokenHelper.generateAccessToken
       userService.sendMail(List(userEmail), Constants.MAIL_SUBJECT, Constants.MAIL_BODY).recover {
         case mailerDaemonError: MailerDaemonException =>
-          getLogger(this.getClass).info("Unable to send Confirmation Mail : " + mailerDaemonError.getMessage)
+          getLogger(this.getClass).info("Unable to send Confirmation Mail : ")
       }
       Future.successful(Ok(jsonResponse.successResponse(Json.obj("user" -> userResponse.toJson,
         "accessToken" -> JsString(accessToken)))).withSession("accessToken" -> accessToken))
     }.recover {
-      case insertionError: InsertionError => BadRequest(jsonResponse
-        .failureResponse(insertionError.message))
+      case insertionError: InsertionError =>
+        BadRequest(jsonResponse.failureResponse(insertionError.message))
     }
   }
 
