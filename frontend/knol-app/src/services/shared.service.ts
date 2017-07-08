@@ -5,7 +5,7 @@ import "rxjs/add/observable/of";
 import "rxjs/add/observable/throw";
 import "rxjs/add/operator/catch";
 import "rxjs/add/operator/map";
-import {Storage} from '@ionic/storage'
+import {Storage} from "@ionic/storage";
 
 @Injectable()
 export class SharedService {
@@ -13,20 +13,20 @@ export class SharedService {
 
   constructor(private http: Http, public storage: Storage) {
     this.storage.get("user").then((user) => {
-      if(user) {
+      if (user) {
         this.storage.get("accessToken").then((accessToken) => {
-          if(accessToken) {
+          if (accessToken) {
             this.isLoggedIn = true;
           }
-        })
+        });
       }
-    })
+    });
   }
 
   clearStorage() {
     this.isLoggedIn = false;
     this.storage.clear().then(data => {
-      console.log('Removed')
+      console.log("Removed")
     })
   }
 

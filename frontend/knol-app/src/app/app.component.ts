@@ -7,7 +7,7 @@ import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
 import { SignupPage } from "../pages/signup/signup";
 import {SharedService} from "../services/shared.service";
-import { Storage } from "@ionic/storage"
+import { Storage } from "@ionic/storage";
 @Component({
   templateUrl: "app.html"
 })
@@ -36,10 +36,10 @@ export class MyApp {
 
   logout() {
     this.storage.get("user").then((user) => {
-      if(user) {
+      if (user) {
         this.email = JSON.parse(user).email;
         this.storage.get("accessToken").then((token) => {
-          if(token) {
+          if (token) {
             this.sharedService.logout(this.email, token).subscribe((data: any) => {
               this.sharedService.clearStorage();
               this.isLoggedIn = false;

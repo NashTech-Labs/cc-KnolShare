@@ -27,7 +27,7 @@ export class HomePage implements OnInit {
   ngOnInit() {
     if (this.sharedService.isLoggedIn) {
       this.storage.get("user").then((val) => {
-        if(val) {
+        if (val) {
           this.userName = JSON.parse(val).userName;
         }
       });

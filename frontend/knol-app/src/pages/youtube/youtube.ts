@@ -37,12 +37,12 @@ export class YoutubePage implements OnInit{
 
   goToPreviewPage(i: number) {
     this.storage.get("videoData").then((val) => {
-      if(val) {
+      if (val) {
         this.storage.remove("videoData").then((res) => {
-          this.storage.set('videoData', JSON.stringify(this.items[i]));
+          this.storage.set("videoData", JSON.stringify(this.items[i]));
         })
       } else {
-        this.storage.set('videoData', JSON.stringify(this.items[i]));
+        this.storage.set("videoData", JSON.stringify(this.items[i]));
       }
     }, err => console.error(err));
 

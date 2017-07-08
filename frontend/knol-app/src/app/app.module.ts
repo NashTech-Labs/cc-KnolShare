@@ -16,7 +16,6 @@ import {SharedService} from "../services/shared.service";
 import {YoutubePage} from "../pages/youtube/youtube";
 import {YoutubePreviewPage} from "../pages/youtube/youtube-preview";
 import { IonicStorageModule } from "@ionic/storage";
-//import { Storage } from "@ionic/Storage";
 
 @NgModule({
   declarations: [
