@@ -106,3 +106,6 @@ frontend/knol-app/.idea
 frontend/knol-app/hooks
 frontend/knol-app/node_modules
 frontend/knol-app/www
+frontend/knol-panel/.idea
+frontend/knol-panel/node_modules
+
