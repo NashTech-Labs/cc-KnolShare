@@ -9,7 +9,7 @@ import { Storage } from "@ionic/storage";
   templateUrl: "youtube.html",
   providers: [YoutubeService]
 })
-export class YoutubePage implements OnInit{
+export class YoutubePage implements OnInit  {
 
   items: any[];
   youtubeData: any;
@@ -22,9 +22,9 @@ export class YoutubePage implements OnInit{
     this.youtubeService.getVideos().subscribe((data: any) => {
       this.items = data.items;
       this.youtubeData = data;
-      for(let i=0; i < this.items.length; i++) {
-        if(this.items[i].id) {
-          if(this.items[i].id.videoId) {
+      for(let i = 0; i < this.items.length; i++) {
+        if (this.items[i].id) {
+          if (this.items[i].id.videoId) {
             this.ids.push = this.items[i].id.videoId;
           }
         }
@@ -32,7 +32,7 @@ export class YoutubePage implements OnInit{
     }, (err: any) => {
       alert(err);
       console.error(err);
-    })
+    });
   }
 
   goToPreviewPage(i: number) {
@@ -49,7 +49,7 @@ export class YoutubePage implements OnInit{
     this.navCtrl.push(YoutubePreviewPage);
   }
 
-  previousPage(){
+  previousPage() {
     this.youtubeService.getVideos(null, this.youtubeData.prevPageToken).subscribe((data: any) => {
       this.items = data.items;
       this.youtubeData = data;

@@ -8,8 +8,8 @@ declare var YT: any;
 @Component({
   selector: "page-youtube-preview",
   templateUrl: "youtube-preview.html"
-  //providers: [YoutubeService]
 })
+
 export class YoutubePreviewPage implements OnInit {
   player: any;
   title: string;
