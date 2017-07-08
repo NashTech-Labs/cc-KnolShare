@@ -1,7 +1,7 @@
 CREATE TABLE users(
   id BIGSERIAL PRIMARY KEY,
   username varchar(100) NOT NULL ,
-  email varchar(100) NOT NULL ,
+  email varchar(100) NOT NULL UNIQUE ,
   password varchar(100) NOT NULL,
   phone_num varchar(10)
 );
@@ -41,7 +41,7 @@ INSERT INTO video_store values(1,'Sangeeta','xyz','Some_url',5);
 
 CREATE TABLE userSessions(
 id BIGSERIAL PRIMARY KEY ,
-email varchar(100) NOT NULL ,
+email varchar(100) NOT NULL UNIQUE ,
 accessToken varchar(100) NOT NULL
 );
 

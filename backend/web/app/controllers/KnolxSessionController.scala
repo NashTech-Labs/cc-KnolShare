@@ -3,6 +3,7 @@ package controllers
 import java.sql.Date
 
 import com.google.inject.Inject
+import com.knoldus.dao.services.user.UserSessionDBService
 import com.knoldus.models.KnolxSession
 import com.knoldus.utils.{JsonResponse, LoggerHelper}
 import security.{SecuredAction, SecuredRequest}
@@ -14,13 +15,12 @@ import com.knoldus.utils.JsonHelper._
 
 import scala.util.control.NonFatal
 
-class KnolxSessionController @Inject()(knolxSessionService: KnolxSessionService) extends
-  Controller with SecuredAction with LoggerHelper with JsonResponse {
+class KnolxSessionController @Inject()(knolxSessionService: KnolxSessionService, val userSessionServ: UserSessionDBService) extends
+  Controller with SecuredAction[UserSessionDBService] with LoggerHelper with JsonResponse {
 
   def createKnolxSession: Action[AnyContent] = UserAction.async { implicit request =>
     val (presenter: String, topic: String, sessionId: Int, rating: Int, scheduledDate: Date) =
       extractJsonFromRequest
-
     val topicProvided: Option[String] = if (topic.isEmpty) None else { Some(topic) }
     val (knolxSessionId, knolxRating) = getSessionData(sessionId, rating)
     val knolxSession = KnolxSession(-1, presenter, topicProvided, knolxSessionId, knolxRating,
