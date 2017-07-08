@@ -14,7 +14,6 @@ import ExecutionContext.Implicits.global
 
 class UserService @Inject()(userDBService: UserDBService, mailService: MailServiceImpl) {
 
-  def generateAccessToken: String = Random.alphanumeric.take(Constants.TEN).mkString("")
 
   def validatePassWord(password: String, confirmPassword: String): Boolean = {
     password == confirmPassword
@@ -30,7 +29,9 @@ class UserService @Inject()(userDBService: UserDBService, mailService: MailServi
   def sendMail(listRecipents: List[String], subject: String, content: String): Future[Boolean] = {
     if (mailService.sendMail(listRecipents, subject, content)){
       Future(true)
-    } else throw MailerDaemonException("Failed to send the mail")
+    } else {
+      Future.failed(MailerDaemonException("Failed to send the mail"))
+    }
   }
 
   def validateUser(email: String): Future[User] = {
@@ -38,9 +39,7 @@ class UserService @Inject()(userDBService: UserDBService, mailService: MailServi
       case Success(futureUserOpt) => futureUserOpt.map { userOpt =>
             userOpt.fold {
               throw UserNotFoundException("User With This Email Does Not Exists")
-            } {
-              user => user
-            }
+            } (identity)
         }
 
       case Failure(_) => throw UserNotFoundException("User With This Email Does Not Exists")

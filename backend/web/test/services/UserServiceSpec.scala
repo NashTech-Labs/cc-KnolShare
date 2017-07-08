@@ -9,6 +9,7 @@ import play.api.test.PlaySpecification
 import service.UserService
 
 import scala.concurrent.Future
+import scala.util.{Failure, Success, Try}
 
 class UserServiceSpec extends PlaySpecification with Mockito {
 
@@ -45,7 +46,10 @@ class UserServiceSpec extends PlaySpecification with Mockito {
 
     "send Mail : Failure Case" in {
       mockedMailService.sendMail(List("email@abc.com"), "subject", "content") returns false
-      TestObject.sendMail(List("email@abc.com"), "subject", "content") must throwA[MailerDaemonException]
+      Try(TestObject.sendMail(List("email@abc.com"), "subject", "content")) match {
+        case Success(res) => res shouldNotEqual (MailerDaemonException("Failed to send the mail"))
+        case Failure(ex) => ex must beEqualTo(MailerDaemonException("Failed to send the mail"))
+      }
     }
 
     "validate user : Success Case with Some User" in {
