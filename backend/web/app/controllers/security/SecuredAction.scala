@@ -18,7 +18,7 @@ trait SecuredAction[U <: UserSessionDBService] {
 
     override def invokeBlock[A](request: Request[A],
                                 block: (SecuredRequest[A]) => Future[Result]): Future[Result] = {
-      val accessToken = request.headers.get("accessToken").fold("")(identity)
+      val accessToken = request.headers.get("accessToken").fold("")(identity).replace("\"", "")
       val email = request.headers.get("email").fold("")(identity)
       userSessionServ.getUserSessionByEmail(email).flatMap {
         userSessionOpt =>
