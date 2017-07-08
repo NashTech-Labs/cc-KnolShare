@@ -26,8 +26,8 @@ export class SharedService {
   clearStorage() {
     this.isLoggedIn = false;
     this.storage.clear().then(data => {
-      console.log("Removed")
-    })
+      console.log("Removed");
+    });
   }
 
   logout(email: string, accessToken: string) {

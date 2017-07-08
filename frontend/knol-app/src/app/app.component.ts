@@ -50,10 +50,6 @@ export class MyApp {
         });
       }
     });
-
-
-    //this.sharedService.clearStorage();
-
   }
 
   initializeApp() {

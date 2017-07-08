@@ -19,7 +19,7 @@ export class YoutubePreviewPage implements OnInit {
 
   ngOnInit() {
     this.storage.get("videoData").then((val) => {
-      if(val) {
+      if (val) {
         this.videoId = JSON.parse(val).id.videoId;
         this.title = JSON.parse(val).snippet.title;
         this.description = JSON.parse(val).snippet.description;
