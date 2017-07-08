@@ -1,0 +1,28 @@
+input, button {
+    margin-bottom: 5%;
+}
+
+.btn-div {
+    width: 100%;
+    border-color : transparent;
+}
+
+
+.knol-color {
+    /*background-color: #004586;*/
+    background-color: #6e95ba;
+}
+
+.container {
+    margin-top: 10%;
+}
+
+form {
+    margin-top: 30%;
+}
+
+#img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
