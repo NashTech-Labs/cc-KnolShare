@@ -1,30 +1,34 @@
 package controllers.security
 
-import play.api.libs.json.Json
+import com.knoldus.dao.services.user.UserSessionDBService
+import play.api.mvc._
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import play.api.mvc.{ActionBuilder, Controller, Request, Result, WrappedRequest}
 
-case class UserSession(accessToken: String, email: String)
 
 case class SecuredRequest[A](accessToken: String, request: Request[A])
   extends WrappedRequest(request)
 
 trait SecuredAction {
 
-  self: Controller =>
+  object UserAction extends ActionBuilder[SecuredRequest] with Controller {
 
-  object UserAction extends ActionBuilder[SecuredRequest] {
+    val userSessionService = UserSessionDBService
 
     override def invokeBlock[A](request: Request[A],
-        block: (SecuredRequest[A]) => Future[Result]): Future[Result] = {
-      implicit val req = request
-      val accessToken = req.headers.get("accessToken").fold("")(identity)
-      if (req.session.get("accessToken").fold("")(identity).equals(accessToken) && !accessToken.isEmpty) {
-        block(SecuredRequest(accessToken, request))
-      } else {
-        Future.successful(BadRequest(Json.obj("error" -> Json.obj("message" -> "Unauthorised Access")))
-      )
+                                block: (SecuredRequest[A]) => Future[Result]): Future[Result] = {
+      val accessToken = request.headers.get("accessToken").fold("")(identity)
+      val email = request.headers.get("email").fold("")(identity)
+      userSessionService.getUserSessionByEmail(email).flatMap {
+        userSessionOpt =>
+          userSessionOpt.fold(Future.successful(Unauthorized("User Does not Exist !!"))) { userSession =>
+            if (userSession.accessToken.equals(accessToken)) {
+              block(SecuredRequest(accessToken, request))
+            } else {
+              Future.successful(Unauthorized("Unauthorized Access !!"))
+            }
+          }
       }
     }
   }

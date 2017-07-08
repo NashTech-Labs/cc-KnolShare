@@ -37,4 +37,15 @@ CREATE TABLE video_store(
 
 INSERT INTO video_store values(1,'Sangeeta','xyz','Some_url',5);
 
+-------------------------------7/07/2017-------------------------------------------------
+
+CREATE TABLE userSessions(
+id BIGSERIAL PRIMARY KEY ,
+email varchar(100) NOT NULL ,
+accessToken varchar(100) NOT NULL
+);
+
+INSERT INTO userSessions VALUES(1, 'test@test.com', 'accessToken')
+
+-- ALTER TABLE video_store RENAME To videoStore ;
 
