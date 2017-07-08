@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { NavController } from "ionic-angular";
 import {YoutubeService} from "./youtube.service";
 import {YoutubePreviewPage} from "./youtube-preview";
+import { Storage } from "@ionic/storage";
 
 @Component({
   selector: "page-youtube",
@@ -14,7 +15,8 @@ export class YoutubePage implements OnInit{
   youtubeData: any;
   ids: string[] = [];
   constructor(public navCtrl: NavController,
-              private youtubeService: YoutubeService) {}
+              private youtubeService: YoutubeService,
+              public storage: Storage) {}
 
   ngOnInit() {
     this.youtubeService.getVideos().subscribe((data: any) => {
@@ -34,10 +36,16 @@ export class YoutubePage implements OnInit{
   }
 
   goToPreviewPage(i: number) {
-    if(localStorage.getItem('videoData')) {
-      localStorage.removeItem('videoData')
-    }
-    localStorage.setItem('videoData', JSON.stringify(this.items[i]));
+    this.storage.get("videoData").then((val) => {
+      if(val) {
+        this.storage.remove("videoData").then((res) => {
+          this.storage.set('videoData', JSON.stringify(this.items[i]));
+        })
+      } else {
+        this.storage.set('videoData', JSON.stringify(this.items[i]));
+      }
+    }, err => console.error(err));
+
     this.navCtrl.push(YoutubePreviewPage);
   }
 

@@ -5,30 +5,43 @@ import "rxjs/add/observable/of";
 import "rxjs/add/observable/throw";
 import "rxjs/add/operator/catch";
 import "rxjs/add/operator/map";
+import {Storage} from '@ionic/storage'
 
 @Injectable()
 export class SharedService {
   isLoggedIn: boolean = false;
 
-  constructor(private http: Http) {
-    if (localStorage.getItem("user") && localStorage.getItem("accessToken")) {
-      this.isLoggedIn = true;
-    }
+  constructor(private http: Http, public storage: Storage) {
+    this.storage.get("user").then((user) => {
+      if(user) {
+        this.storage.get("accessToken").then((accessToken) => {
+          if(accessToken) {
+            this.isLoggedIn = true;
+          }
+        })
+      }
+    })
   }
 
   clearStorage() {
     this.isLoggedIn = false;
-    localStorage.clear();
+    this.storage.clear().then(data => {
+      console.log('Removed')
+    })
   }
 
-  logout() {
+  logout(email: string, accessToken: string) {
+
     let headers = new Headers({
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "accessToken": accessToken,
+      "email": email
     });
 
     return this.http.get("http://localhost:9000/knolshare/logout", {headers: headers})
       .map(res => this.extractData(res))
       .catch(this.handleError);
+
   }
 
   private extractData(res: any) {
