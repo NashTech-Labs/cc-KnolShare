@@ -1,20 +1,22 @@
 package controllers
 
 import scala.concurrent.Future
-
 import com.knoldus.exceptions.PSqlException.UserNotFoundException
-import com.knoldus.models.Admin
+import com.knoldus.models.{Admin, UserSession}
 import com.knoldus.utils.JsonResponse
+import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
 import org.specs2.mock.Mockito
 import play.api.libs.json.Json
 import play.api.test.{FakeRequest, PlaySpecification, WithApplication}
-import service.{AdminService, UserService}
+import service.{AdminService, UserService, UserSessionService}
 import userHelper.{Helper, PassWordUtility}
 
 class AdminControllerSpec extends PlaySpecification with Mockito {
 
   val mockedAdminService = mock[AdminService]
+  private val mockedUserSessionService = mock[UserSessionService]
+
   private val mockedHelper = mock[Helper]
 
   private val mockedJsonResponse = mock[JsonResponse]
@@ -25,7 +27,7 @@ class AdminControllerSpec extends PlaySpecification with Mockito {
 
   //TODO: Remove JsonResponse with a mocked object
   private val adminController = new AdminController(
-    mockedAdminService, mockedPasswordUtility, mockedHelper, JsonResponse)
+    mockedAdminService, mockedPasswordUtility, mockedHelper, JsonResponse, mockedUserSessionService)
   private val validUserLoginJson ="""{"email":"admin@gmail.com",
       |"password":"admin"}""".stripMargin
 
@@ -34,6 +36,8 @@ class AdminControllerSpec extends PlaySpecification with Mockito {
 
     "validate login for admin with valid email and password" in new WithApplication {
       val admin = Admin(1, "admin@gmail.com", "admin")
+      when(mockedUserSessionService.createUserSession(UserSession(None, "admin@gmail.com", "accessToken"))). thenReturn(Future.successful(UserSession(Some(1), "admin@gmail.com", "accessToken")))
+
       mockedAdminService.validateUser("admin@gmail.com") returns Future.successful(admin)
       mockedPasswordUtility.verifyPassword("admin","admin") returns(true)
       mockedHelper.generateAccessToken returns "accessToken"
@@ -51,6 +55,8 @@ class AdminControllerSpec extends PlaySpecification with Mockito {
     "invalidate login for admin with invalid email and password" in new WithApplication {
       val admin = Admin(1, "admin@gmail.com", "admin")
       mockedAdminService.validateUser("admin@gmail.com") returns Future.successful(admin)
+      when(mockedUserSessionService.createUserSession(UserSession(None, "admin@gmail.com", "accessToken"))). thenReturn(Future.successful(UserSession(Some(1), "admin@gmail.com", "accessToken")))
+
       mockedPasswordUtility.verifyPassword("admin","admin") returns(false)
       mockedHelper.generateAccessToken returns "accessToken"
 
