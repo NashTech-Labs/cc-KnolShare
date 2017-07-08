@@ -18,9 +18,9 @@ export class YoutubeService {
 
     let url;
 
-    if(nextPageToken) {
+    if (nextPageToken) {
       url = `https://www.googleapis.com/youtube/v3/search?pageToken=${nextPageToken}&order=date&part=snippet&channelId=UCP4g5qGeUSY7OokXfim1QCQ&key=AIzaSyCmedFZ2QVVzQ1cElmU6kPM2PV5YEaQwhY`;
-    } else if(previousPageToken) {
+    } else if (previousPageToken) {
       url = `https://www.googleapis.com/youtube/v3/search?pageToken=${previousPageToken}&order=date&part=snippet&channelId=UCP4g5qGeUSY7OokXfim1QCQ&key=AIzaSyCmedFZ2QVVzQ1cElmU6kPM2PV5YEaQwhY`;
     } else {
       url = "https://www.googleapis.com/youtube/v3/search?order=date&part=snippet&channelId=UCP4g5qGeUSY7OokXfim1QCQ&key=AIzaSyCmedFZ2QVVzQ1cElmU6kPM2PV5YEaQwhY";

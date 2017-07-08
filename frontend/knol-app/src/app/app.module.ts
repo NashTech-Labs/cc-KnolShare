@@ -15,6 +15,7 @@ import {SignupPage} from "../pages/signup/signup";
 import {SharedService} from "../services/shared.service";
 import {YoutubePage} from "../pages/youtube/youtube";
 import {YoutubePreviewPage} from "../pages/youtube/youtube-preview";
+import { IonicStorageModule } from "@ionic/storage";
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import {YoutubePreviewPage} from "../pages/youtube/youtube-preview";
     CommonModule,
     FormsModule,
     HttpModule,
+    IonicStorageModule.forRoot(),
     IonicModule.forRoot(MyApp),
     FormsModule,
   ],
@@ -46,7 +48,8 @@ import {YoutubePreviewPage} from "../pages/youtube/youtube-preview";
     StatusBar,
     SplashScreen,
     SharedService,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    Storage
   ]
 })
 export class AppModule {}

@@ -2,27 +2,29 @@ import { Component, OnInit } from "@angular/core";
 import { NavController } from "ionic-angular";
 import {YoutubeService} from "./youtube.service";
 import {YoutubePreviewPage} from "./youtube-preview";
+import { Storage } from "@ionic/storage";
 
 @Component({
   selector: "page-youtube",
   templateUrl: "youtube.html",
   providers: [YoutubeService]
 })
-export class YoutubePage implements OnInit{
+export class YoutubePage implements OnInit  {
 
   items: any[];
   youtubeData: any;
   ids: string[] = [];
   constructor(public navCtrl: NavController,
-              private youtubeService: YoutubeService) {}
+              private youtubeService: YoutubeService,
+              public storage: Storage) {}
 
   ngOnInit() {
     this.youtubeService.getVideos().subscribe((data: any) => {
       this.items = data.items;
       this.youtubeData = data;
-      for(let i=0; i < this.items.length; i++) {
-        if(this.items[i].id) {
-          if(this.items[i].id.videoId) {
+      for(let i = 0; i < this.items.length; i++) {
+        if (this.items[i].id) {
+          if (this.items[i].id.videoId) {
             this.ids.push = this.items[i].id.videoId;
           }
         }
@@ -30,18 +32,24 @@ export class YoutubePage implements OnInit{
     }, (err: any) => {
       alert(err);
       console.error(err);
-    })
+    });
   }
 
   goToPreviewPage(i: number) {
-    if(localStorage.getItem('videoData')) {
-      localStorage.removeItem('videoData')
-    }
-    localStorage.setItem('videoData', JSON.stringify(this.items[i]));
+    this.storage.get("videoData").then((val) => {
+      if (val) {
+        this.storage.remove("videoData").then((res) => {
+          this.storage.set("videoData", JSON.stringify(this.items[i]));
+        })
+      } else {
+        this.storage.set("videoData", JSON.stringify(this.items[i]));
+      }
+    }, err => console.error(err));
+
     this.navCtrl.push(YoutubePreviewPage);
   }
 
-  previousPage(){
+  previousPage() {
     this.youtubeService.getVideos(null, this.youtubeData.prevPageToken).subscribe((data: any) => {
       this.items = data.items;
       this.youtubeData = data;

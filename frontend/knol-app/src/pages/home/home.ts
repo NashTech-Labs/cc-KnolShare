@@ -4,6 +4,7 @@ import {LoginPage} from "../login/login";
 import {SignupPage} from "../signup/signup";
 import {YoutubePage} from "../youtube/youtube";
 import {SharedService} from "../../services/shared.service";
+import { Storage } from "@ionic/storage";
 
 
 @Component({
@@ -19,11 +20,17 @@ export class HomePage implements OnInit {
     "Youtube": YoutubePage
   };
 
-  constructor(public navCtrl: NavController, private sharedService: SharedService) {}
+  constructor(public navCtrl: NavController,
+              private sharedService: SharedService,
+              public storage: Storage) {}
 
   ngOnInit() {
     if (this.sharedService.isLoggedIn) {
-      this.userName = JSON.parse(localStorage.getItem("user")).userName;
+      this.storage.get("user").then((val) => {
+        if (val) {
+          this.userName = JSON.parse(val).userName;
+        }
+      });
     }
   }
 

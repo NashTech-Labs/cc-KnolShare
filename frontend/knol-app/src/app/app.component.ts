@@ -7,7 +7,7 @@ import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
 import { SignupPage } from "../pages/signup/signup";
 import {SharedService} from "../services/shared.service";
-
+import { Storage } from "@ionic/storage";
 @Component({
   templateUrl: "app.html"
 })
@@ -17,10 +17,11 @@ export class MyApp {
   rootPage: any = HomePage;
   isLoggedIn: boolean = false;
   pages: Array<{title: string, component: any}>;
-
+  email: string;
   constructor(public platform: Platform,
               public statusBar: StatusBar,
               public sharedService: SharedService,
+              public storage: Storage,
               public splashScreen: SplashScreen) {
     this.initializeApp();
 
@@ -34,14 +35,21 @@ export class MyApp {
   }
 
   logout() {
-    //this.sharedService.logout().subscribe((data: any) => {
-    //  this.sharedService.clearStorage();
-    //  this.isLoggedIn = false;
-    //}, (err: any) => {
-    //  console.error(err);
-    //})
-    this.sharedService.clearStorage();
-
+    this.storage.get("user").then((user) => {
+      if (user) {
+        this.email = JSON.parse(user).email;
+        this.storage.get("accessToken").then((token) => {
+          if (token) {
+            this.sharedService.logout(this.email, token).subscribe((data: any) => {
+              this.sharedService.clearStorage();
+              this.isLoggedIn = false;
+            }, (err: any) => {
+              console.error(err);
+            });
+          }
+        });
+      }
+    });
   }
 
   initializeApp() {
